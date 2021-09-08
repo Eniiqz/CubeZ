@@ -25,6 +25,7 @@ export (float) onready var reload_time
 export (bool) var can_shoot = false
 
 export (bool) var is_shotgun = false
+export (bool) var is_equipped = false
 
 signal weapon_ammo_changed(new_ammo_count)
 signal weapon_out_of_ammo
@@ -35,7 +36,8 @@ func _ready():
 	can_shoot = true
 	current_ammo_in_mag = default_ammo_in_mag
 	current_ammo_reserve = default_ammo_reserve
-	ReloadTimer.connect("timeout", self, "_finish_reload()")
+	WeaponLine.set_point_position(0, WeaponEnd.position)
+	ReloadTimer.connect("timeout", self, "_finish_reload")
 
 	
 func _finish_reload():
@@ -59,16 +61,8 @@ func reload():
 func shoot():
 	if can_shoot and current_ammo_in_mag != 0 and ShootCooldown.is_stopped():
 		current_ammo_in_mag -= 1
+		print("CURRENT AMMO: ", current_ammo_in_mag, " ", current_ammo_reserve)
 		ShootCooldown.start(60/float(fire_rate))
-		var PlayerRaycast = get_parent().PlayerRaycast
-		PlayerRaycast.cast_to = Vector2(max_range, 0)
-		PlayerRaycast.enabled = true
-		PlayerRaycast.force_raycast_update()
-		if PlayerRaycast.is_colliding():
-			var collider = PlayerRaycast.get_collider()
-			if collider is KinematicBody2D and collider.is_in_group("Zombie"):
-				collider.health -= damage
-		PlayerRaycast.enabled = false
 		emit_signal("weapon_fired")
 		if current_ammo_in_mag == 0:
 			reload()
