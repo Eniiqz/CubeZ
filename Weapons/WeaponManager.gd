@@ -7,6 +7,7 @@ onready var current_weapon
 onready var weapons = []
 
 onready var PlayerRaycast = get_parent().get_node("RayCast2D")
+export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
 	print("weapon manager ready")
@@ -41,6 +42,8 @@ func _shoot():
 		current_weapon.shoot()
 
 func send_signal_up():
+	var temp_bullet = Bullet.instance()
+	get_parent().owner.add_child(temp_bullet)
 	var PlayerRaycast = get_parent().PlayerRaycast
 	PlayerRaycast.cast_to = Vector2(current_weapon.max_range, 0)
 	PlayerRaycast.enabled = true
