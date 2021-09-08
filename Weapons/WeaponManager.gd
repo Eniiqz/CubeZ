@@ -15,34 +15,41 @@ func _ready():
 		weapon.hide()
 	if not current_weapon:
 		switch_weapon($Pistol)
-		weapons[0] = $Pistol
-		weapons[1] = $SMG
 	current_weapon.show()
 	set_process_input(true)
-
-func reload():
-	pass
 
 
 func switch_weapon(weapon):
 	if weapon != current_weapon and current_weapon != null:
 		current_weapon.disconnect("weapon_fired", self, "send_signal_up") 
 		current_weapon.hide()
+		current_weapon.is_equipped = false
 		weapon.show()
 		emit_signal("weapon_changed", weapon)
 		current_weapon = weapon
+		current_weapon.is_equipped = true
 	elif current_weapon == null:
 		current_weapon = weapon
+		current_weapon.is_equipped = true
 		current_weapon.show()
 		emit_signal("weapon_changed", current_weapon)
 	if not current_weapon.is_connected("weapon_fired", self, "send_signal_up"):
+		print(current_weapon)
 		current_weapon.connect("weapon_fired", self, "send_signal_up")
 		
 func _shoot():
 		current_weapon.shoot()
 
 func send_signal_up():
-	print("weapon actually fired")
+	var PlayerRaycast = get_parent().PlayerRaycast
+	PlayerRaycast.cast_to = Vector2(current_weapon.max_range, 0)
+	PlayerRaycast.enabled = true
+	PlayerRaycast.force_raycast_update()
+	if PlayerRaycast.is_colliding():
+		var collider = PlayerRaycast.get_collider()
+		if collider is KinematicBody2D and collider.is_in_group("Zombie"):
+			collider.health -= current_weapon.damage
+	PlayerRaycast.enabled = false
 
 func _process(delta):
 	if current_weapon != null:
@@ -61,3 +68,5 @@ func _input(event: InputEvent):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):
 			switch_weapon(weapons[0])
+		elif event.is_action_released("weapon_slot_2"):
+			switch_weapon(weapons[1])

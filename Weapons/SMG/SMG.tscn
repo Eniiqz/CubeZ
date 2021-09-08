@@ -13,3 +13,6 @@ reload_time = 3.2
 
 [node name="Sprite" parent="." index="1"]
 texture = ExtResource( 2 )
+
+[node name="WeaponEnd" parent="." index="2"]
+position = Vector2( 16.5, 0 )
