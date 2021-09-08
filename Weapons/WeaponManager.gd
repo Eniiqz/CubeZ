@@ -46,7 +46,7 @@ func send_signal_up():
 
 func _process(delta):
 	if current_weapon != null:
-		current_weapon.weapon_line.set_point_position(1, to_local(get_global_mouse_position()) - Vector2(20, 20))
+		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - Vector2(20, 20))
 		if current_weapon.fire_mode == 1 and Input.is_action_pressed("weapon_shoot"):
 			_shoot()
 		elif current_weapon.fire_mode == 2 and Input.is_action_pressed("weapon_shoot"):
@@ -59,4 +59,5 @@ func _input(event: InputEvent):
 			_shoot()
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
-		elif event.is_action_released("weapon_slot_1")
+		elif event.is_action_released("weapon_slot_1"):
+			switch_weapon(weapons[0])

@@ -35,7 +35,7 @@ func _ready():
 	can_shoot = true
 	current_ammo_in_mag = default_ammo_in_mag
 	current_ammo_reserve = default_ammo_reserve
-	ReloadTimer.connect("timeout", self, "_finish_reload()")
+	ReloadTimer.connect("timeout", self, "_finish_reload")
 
 	
 func _finish_reload():
@@ -59,6 +59,7 @@ func reload():
 func shoot():
 	if can_shoot and current_ammo_in_mag != 0 and ShootCooldown.is_stopped():
 		current_ammo_in_mag -= 1
+		print("CURRENT AMMO: ", current_ammo_in_mag, " ", current_ammo_reserve)
 		ShootCooldown.start(60/float(fire_rate))
 		var PlayerRaycast = get_parent().PlayerRaycast
 		PlayerRaycast.cast_to = Vector2(max_range, 0)
