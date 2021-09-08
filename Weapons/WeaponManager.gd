@@ -44,12 +44,13 @@ func _shoot():
 func send_signal_up():
 	var temp_bullet = Bullet.instance()
 	get_parent().owner.add_child(temp_bullet)
-	var PlayerRaycast = get_parent().PlayerRaycast
 	PlayerRaycast.cast_to = Vector2(current_weapon.max_range, 0)
 	PlayerRaycast.enabled = true
 	PlayerRaycast.force_raycast_update()
 	if PlayerRaycast.is_colliding():
 		var collider = PlayerRaycast.get_collider()
+		temp_bullet.look_at(collider.position)
+		temp_bullet.position = current_weapon.WeaponEnd.position
 		if collider is KinematicBody2D and collider.is_in_group("Zombie"):
 			collider.health -= current_weapon.damage
 	PlayerRaycast.enabled = false
@@ -57,11 +58,12 @@ func send_signal_up():
 func _process(delta):
 	if current_weapon != null:
 		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - Vector2(20, 20))
-		if current_weapon.fire_mode == 1 and Input.is_action_pressed("weapon_shoot"):
-			_shoot()
-		elif current_weapon.fire_mode == 2 and Input.is_action_pressed("weapon_shoot"):
-			#handle burst
-			pass
+		match current_weapon.fire_mode and Input.is_action_just_released("weapon_shoot"):
+			1:
+				_shoot()
+			2:
+				pass
+				# Handle burst fire
 
 func _input(event: InputEvent):
 	if current_weapon != null:

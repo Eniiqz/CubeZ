@@ -61,3 +61,5 @@ func _on_Area2D_body_exited(body: Node) -> void:
 func _physics_process(delta):
 	if TargetedPlayer != null:
 		look_at(TargetedPlayer.position)
+		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
+		print(direction)

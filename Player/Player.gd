@@ -20,6 +20,7 @@ export var max_health = 100
 
 onready var PlayerRaycast = get_node("RayCast2D")
 onready var PlayerArea = get_node("Area2D")
+onready var PlayerCamera = get_node("PlayerCamera")
 
 signal on_damage
 signal on_health_given
@@ -31,6 +32,7 @@ func _ready():
 	can_shoot = true
 	can_look = true
 	can_sprint = true
+	PlayerCamera.current = true
 
 var velocity = Vector2()
 

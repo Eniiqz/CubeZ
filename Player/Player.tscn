@@ -59,5 +59,7 @@ shape = SubResource( 3 )
 cast_to = Vector2( 750, 0 )
 collision_mask = 6
 
+[node name="PlayerCamera" type="Camera2D" parent="."]
+
 [editable path="WeaponManager/Pistol"]
 [editable path="WeaponManager/SMG"]
