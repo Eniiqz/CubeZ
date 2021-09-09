@@ -19,7 +19,6 @@ func _ready():
 	current_weapon.show()
 	set_process_input(true)
 
-
 func switch_weapon(weapon):
 	if weapon != current_weapon and current_weapon != null:
 		current_weapon.disconnect("weapon_fired", self, "send_signal_up") 
@@ -55,7 +54,6 @@ func _create_bullet():
 	NewBullet.set_weapon_fired_from(current_weapon)
 
 func on_bullet_hit(object_hit):
-	print(object_hit)
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
 

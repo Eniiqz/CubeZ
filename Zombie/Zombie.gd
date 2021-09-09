@@ -3,14 +3,12 @@ extends KinematicBody2D
 export onready var TargetedPlayer = null
 export var can_move = false
 export var can_look_at_player = false
-export var type = "Enemy"
 
 export var max_health = 100
 export var health  = 100 setget set_health, get_health
 var previous_health = health
 
 onready var ZombieArea = get_node("Area2D")
-
 
 signal on_damage
 signal on_health_given
@@ -33,9 +31,7 @@ func dead():
 
 func set_health(new_health):
 	previous_health = health
-	if new_health < 0:
-		new_health = 0
-	health = new_health
+	health = max(0, new_health)
 	on_health_update()
 		
 func get_health():
