@@ -45,31 +45,27 @@ func _shoot():
 
 func _create_bullet():
 	var NewBullet = Bullet.instance()
-	NewBullet.connect("bullet_hit", self, "send_signal_up")
+	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
 	var bullet_rot_deg = Player.get_rotation_degrees()
-	NewBullet.position = bullet_start_pos
-	NewBullet.set_rotation_degrees(bullet_rot_deg)
 	Player.owner.add_child(NewBullet)
+	NewBullet.position = bullet_start_pos
+	#NewBullet.set_rotation_degrees(bullet_rot_deg)
+	NewBullet.set_direction((get_global_mouse_position() - current_weapon.WeaponEnd.global_position).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
-func send_signal_up(object_hit):
+func on_bullet_hit(object_hit):
 	print(object_hit)
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
-	# TODO: Switch to using actual Bullet, raycasting is kinda whack i think
-	#PlayerRaycast.cast_to = Vector2(current_weapon.max_range, 0)
-	#PlayerRaycast.enabled = true
-	#PlayerRaycast.force_raycast_update()
-	#if PlayerRaycast.is_colliding():
-		#var collider = PlayerRaycast.get_collider()
-		#if collider is KinematicBody2D and collider.is_in_group("Zombie"):
-		#	collider.health -= current_weapon.damage
-	#PlayerRaycast.enabled = false
+
+func send_signal_up():
+	pass
 
 func _process(delta):
 	if current_weapon != null:
-		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - Vector2(20, 20))
+		var line_offset = Player.get_node("CollisionShape2D").shape.get_extents()
+		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - line_offset)
 		if Input.is_action_pressed("weapon_shoot"):
 			match current_weapon.fire_mode:
 				1:
