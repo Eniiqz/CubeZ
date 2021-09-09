@@ -7,7 +7,6 @@ onready var current_weapon
 onready var weapons = []
 
 onready var Player = get_parent()
-onready var PlayerRaycast = Player.get_node("RayCast2D")
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
@@ -38,19 +37,17 @@ func switch_weapon(weapon):
 		current_weapon.connect("weapon_fired", self, "send_signal_up")
 		
 func _shoot():
-		current_weapon.shoot()
-		if current_weapon.current_ammo_in_mag > 0:
-			_create_bullet()
+	current_weapon.shoot()
+	if current_weapon.current_ammo_in_mag > 0:
+		_create_bullet()
 
 func _create_bullet():
 	var NewBullet = Bullet.instance()
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
-	var bullet_rot_deg = Player.get_rotation_degrees()
 	Player.owner.add_child(NewBullet)
 	NewBullet.position = bullet_start_pos
-	#NewBullet.set_rotation_degrees(bullet_rot_deg)
-	NewBullet.set_direction((get_global_mouse_position() - current_weapon.WeaponEnd.global_position).normalized())
+	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
 func on_bullet_hit(object_hit):
@@ -69,9 +66,11 @@ func _process(delta):
 				1:
 					_shoot()
 				2:
-					for shot in current_weapon.burst_options.shots_in_burst:
-						current_weapon.BurstCooldown.start(current_weapon.burst_options.burst_delay)
-						_shoot()
+					if current_weapon.BurstCooldown.is_stopped():
+						for shot in current_weapon.shots_in_burst:
+							_shoot()
+							#current_weapon.ShootCooldown.start(current_weapon.shot_delay)
+						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
 					# Handle burst fire
 
 func _input(event: InputEvent):
