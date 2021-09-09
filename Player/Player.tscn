@@ -1,13 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Weapons/Weapon.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Weapons/WeaponManager.gd" type="Script" id=3]
 [ext_resource path="res://TDS Assets/PNG/weapon_gun.png" type="Texture" id=4]
 [ext_resource path="res://Weapons/SMG/SMG.tscn" type="PackedScene" id=5]
-
-[sub_resource type="CircleShape2D" id=1]
-radius = 40.0
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 40, 40, 40 )
@@ -48,12 +45,6 @@ default_color = Color( 1, 1, 1, 1 )
 [node name="Reload" parent="WeaponManager/SMG" index="4"]
 one_shot = false
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_mask = 13
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 1 )
-
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 mesh = SubResource( 2 )
 
@@ -65,6 +56,9 @@ cast_to = Vector2( 750, 0 )
 collision_mask = 6
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
+
+[node name="HitCooldown" type="Timer" parent="."]
+one_shot = true
 
 [editable path="WeaponManager/Pistol"]
 [editable path="WeaponManager/SMG"]
