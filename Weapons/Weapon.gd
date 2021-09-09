@@ -29,7 +29,9 @@ export (bool) var is_shotgun = false
 export (bool) var is_equipped = false
 
 export (Dictionary) var burst_options = {
-	number_of_rounds = 3,
+	shots_in_burst = 3,
+	shot_delay = (60 / fire_rate),
+	burst_delay = burst_options.shot_delay * burst_options.burst_delay
 }
 
 signal weapon_ammo_changed(new_ammo_count)
