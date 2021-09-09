@@ -28,6 +28,10 @@ export (bool) var can_shoot = false
 export (bool) var is_shotgun = false
 export (bool) var is_equipped = false
 
+export (Dictionary) var burst_options = {
+	number_of_rounds = 3,
+}
+
 signal weapon_ammo_changed(new_ammo_count)
 signal weapon_out_of_ammo
 signal weapon_fire_mode_changed(new_fire_mode)
