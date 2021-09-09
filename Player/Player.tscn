@@ -30,6 +30,7 @@ fire_rate = 500
 damage = 23
 max_range = 850
 reload_time = 2.4
+bullet_velocity = 1200
 
 [node name="Sprite" parent="WeaponManager/Pistol" index="1"]
 texture = ExtResource( 4 )
@@ -39,6 +40,7 @@ position = Vector2( 9.5, 0 )
 
 [node name="SMG" parent="WeaponManager" instance=ExtResource( 5 )]
 max_range = 900
+bullet_velocity = 2500
 
 [node name="Reload" parent="WeaponManager/SMG" index="4"]
 one_shot = false

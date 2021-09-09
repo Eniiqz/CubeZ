@@ -1,16 +1,26 @@
 extends Node2D
+class_name Bullet
+
+var weapon_fired_from setget set_weapon_fired_from
+var direction = Vector2() setget set_direction
+
+signal bullet_hit(object_hit)
+
+func set_weapon_fired_from(current_weapon):
+	weapon_fired_from = current_weapon
+
+func set_direction(new_direction: Vector2):
+	direction = new_direction
+	rotation += direction.angle()
+
+func _physics_process(delta: float) -> void:
+	if weapon_fired_from != null and direction != Vector2.ZERO:
+		# TODO: BULLET IS NOT LINED UP WITH LINE AND MOUSE CURSOR, COULD BE PART OF A LARGER ISSUE!!
+		var velocity = direction * weapon_fired_from.bullet_velocity
+		global_position += velocity * delta
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _on_Bullet_body_entered(body: Node) -> void:
+	if body is KinematicBody2D and body.is_in_group("Zombie"):
+		emit_signal("bullet_hit", body)
+		queue_free()

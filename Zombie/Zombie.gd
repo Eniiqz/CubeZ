@@ -50,8 +50,10 @@ func on_health_update():
 		dead()
 
 func _on_Area2D_body_entered(body: Node) -> void:
-	if body is KinematicBody2D and body.name == "Player":
+	if body is KinematicBody2D and body.is_in_group("Player"):
 		TargetedPlayer = body
+	elif body is Node2D and body.is_in_group("Bullet"):
+		body.queue_free()
 		
 
 func _on_Area2D_body_exited(body: Node) -> void:
@@ -62,4 +64,3 @@ func _physics_process(delta):
 	if TargetedPlayer != null:
 		look_at(TargetedPlayer.position)
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
-		print(direction)
