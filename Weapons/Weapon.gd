@@ -21,6 +21,7 @@ export (FIRE_MODE) onready var fire_mode
 export (int) onready var damage
 export (int) onready var max_range
 export (float) onready var reload_time
+export (int) onready var bullet_velocity
 
 export (bool) var can_shoot = false
 

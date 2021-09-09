@@ -6,10 +6,11 @@ signal weapon_fired(weaponed_fired)
 onready var current_weapon
 onready var weapons = []
 
-onready var PlayerRaycast = get_parent().get_node("RayCast2D")
+onready var Player = get_parent()
+onready var PlayerRaycast = Player.get_node("RayCast2D")
+export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
-	print("weapon manager ready")
 	weapons = get_children()
 	for weapon in weapons:
 		weapon.hide()
@@ -17,7 +18,6 @@ func _ready():
 		switch_weapon($Pistol)
 	current_weapon.show()
 	set_process_input(true)
-
 
 func switch_weapon(weapon):
 	if weapon != current_weapon and current_weapon != null:
@@ -34,31 +34,43 @@ func switch_weapon(weapon):
 		current_weapon.show()
 		emit_signal("weapon_changed", current_weapon)
 	if not current_weapon.is_connected("weapon_fired", self, "send_signal_up"):
-		print(current_weapon)
+		print(current_weapon.name)
 		current_weapon.connect("weapon_fired", self, "send_signal_up")
 		
 func _shoot():
 		current_weapon.shoot()
+		if current_weapon.current_ammo_in_mag > 0:
+			_create_bullet()
+
+func _create_bullet():
+	var NewBullet = Bullet.instance()
+	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
+	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
+	var bullet_rot_deg = Player.get_rotation_degrees()
+	Player.owner.add_child(NewBullet)
+	NewBullet.position = bullet_start_pos
+	#NewBullet.set_rotation_degrees(bullet_rot_deg)
+	NewBullet.set_direction((get_global_mouse_position() - current_weapon.WeaponEnd.global_position).normalized())
+	NewBullet.set_weapon_fired_from(current_weapon)
+
+func on_bullet_hit(object_hit):
+	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
+		object_hit.health -= current_weapon.damage
 
 func send_signal_up():
-	var PlayerRaycast = get_parent().PlayerRaycast
-	PlayerRaycast.cast_to = Vector2(current_weapon.max_range, 0)
-	PlayerRaycast.enabled = true
-	PlayerRaycast.force_raycast_update()
-	if PlayerRaycast.is_colliding():
-		var collider = PlayerRaycast.get_collider()
-		if collider is KinematicBody2D and collider.is_in_group("Zombie"):
-			collider.health -= current_weapon.damage
-	PlayerRaycast.enabled = false
+	pass
 
 func _process(delta):
 	if current_weapon != null:
-		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - Vector2(20, 20))
-		if current_weapon.fire_mode == 1 and Input.is_action_pressed("weapon_shoot"):
-			_shoot()
-		elif current_weapon.fire_mode == 2 and Input.is_action_pressed("weapon_shoot"):
-			#handle burst
-			pass
+		var line_offset = Player.get_node("CollisionShape2D").shape.get_extents()
+		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - line_offset)
+		if Input.is_action_pressed("weapon_shoot"):
+			match current_weapon.fire_mode:
+				1:
+					_shoot()
+				2:
+					pass
+					# Handle burst fire
 
 func _input(event: InputEvent):
 	if current_weapon != null:

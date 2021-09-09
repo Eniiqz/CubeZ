@@ -3,14 +3,14 @@ extends KinematicBody2D
 export onready var TargetedPlayer = null
 export var can_move = false
 export var can_look_at_player = false
-export var type = "Enemy"
+
+export var damage = 25
 
 export var max_health = 100
 export var health  = 100 setget set_health, get_health
 var previous_health = health
 
 onready var ZombieArea = get_node("Area2D")
-
 
 signal on_damage
 signal on_health_given
@@ -33,9 +33,7 @@ func dead():
 
 func set_health(new_health):
 	previous_health = health
-	if new_health < 0:
-		new_health = 0
-	health = new_health
+	health = max(0, new_health)
 	on_health_update()
 		
 func get_health():
@@ -50,8 +48,10 @@ func on_health_update():
 		dead()
 
 func _on_Area2D_body_entered(body: Node) -> void:
-	if body is KinematicBody2D and body.name == "Player":
+	if body is KinematicBody2D and body.is_in_group("Player"):
 		TargetedPlayer = body
+	elif body is Node2D and body.is_in_group("Bullet"):
+		body.queue_free()
 		
 
 func _on_Area2D_body_exited(body: Node) -> void:
@@ -61,3 +61,4 @@ func _on_Area2D_body_exited(body: Node) -> void:
 func _physics_process(delta):
 	if TargetedPlayer != null:
 		look_at(TargetedPlayer.position)
+		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
