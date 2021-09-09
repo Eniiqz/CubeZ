@@ -21,3 +21,6 @@ default_color = Color( 0.996078, 0.0509804, 0.0509804, 1 )
 
 [node name="Reload" type="Timer" parent="."]
 one_shot = true
+
+[node name="BurstCooldown" type="Timer" parent="."]
+one_shot = true

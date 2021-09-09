@@ -3,6 +3,7 @@ class_name Weapon
 
 
 onready var ShootCooldown = get_node("ShootCooldown")
+onready var BurstCooldown = get_node("BurstCooldown")
 onready var ReloadTimer = get_node("Reload")
 onready var PlayerRaycast = get_parent().PlayerRaycast
 onready var WeaponLine = get_node("Line2D")

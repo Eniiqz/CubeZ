@@ -69,7 +69,9 @@ func _process(delta):
 				1:
 					_shoot()
 				2:
-					pass
+					for shot in current_weapon.burst_options.shots_in_burst:
+						current_weapon.BurstCooldown.start(current_weapon.burst_options.burst_delay)
+						_shoot()
 					# Handle burst fire
 
 func _input(event: InputEvent):
@@ -82,3 +84,5 @@ func _input(event: InputEvent):
 			switch_weapon(weapons[0])
 		elif event.is_action_released("weapon_slot_2"):
 			switch_weapon(weapons[1])
+		elif event.is_action_pressed("weapon_slot_3"):
+			switch_weapon(weapons[2])
