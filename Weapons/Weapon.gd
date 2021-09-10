@@ -75,4 +75,3 @@ func shoot():
 		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")
 		if current_ammo_in_mag == 0:
 			reload()
-		return true

@@ -61,6 +61,7 @@ func _process(delta):
 		if Input.is_action_pressed("weapon_shoot") and current_weapon.fire_mode == 1:
 			current_weapon.shoot()
 
+var can_burst = true
 func _input(event: InputEvent):
 	if current_weapon != null:
 		if event.is_action_released("weapon_shoot"):
@@ -68,15 +69,13 @@ func _input(event: InputEvent):
 				0:
 					current_weapon.shoot()
 				2:
-					if current_weapon.BurstCooldown.is_stopped() == true:
-						var shot_counter = 0
+					if can_burst and current_weapon.BurstCooldown.is_stopped():
+						can_burst = false
 						for shot in current_weapon.shots_in_burst:
-							shot_counter += 1
 							current_weapon.shoot()
 							yield(current_weapon.ShootCooldown, "timeout")
 						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
-						yield(current_weapon.BurstCooldown, "timeout")
-						print(shot_counter)
+						can_burst = true
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):
