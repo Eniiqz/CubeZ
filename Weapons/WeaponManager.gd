@@ -58,9 +58,14 @@ func _process(delta):
 	if current_weapon != null:
 		var line_offset = Player.get_node("CollisionShape2D").shape.get_extents()
 		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - line_offset)
-		if Input.is_action_pressed("weapon_shoot"):
+		if Input.is_action_pressed("weapon_shoot") and current_weapon.fire_mode == 1:
+			current_weapon.shoot()
+
+func _input(event: InputEvent):
+	if current_weapon != null:
+		if event.is_action_released("weapon_shoot"):
 			match current_weapon.fire_mode:
-				1:
+				0:
 					current_weapon.shoot()
 				2:
 					if current_weapon.BurstCooldown.is_stopped():
@@ -68,12 +73,6 @@ func _process(delta):
 							current_weapon.shoot()
 							yield(current_weapon.ShootCooldown, "timeout")
 						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
-					# Handle burst fire
-
-func _input(event: InputEvent):
-	if current_weapon != null:
-		if current_weapon.fire_mode == 0 and event.is_action_released("weapon_shoot"):
-			current_weapon.shoot()
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):
