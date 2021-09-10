@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Weapon",
 "language": "GDScript",
 "path": "res://Weapons/Weapon.gd"
+}, {
+"base": "Node2D",
+"class": "ZombieSpawner",
+"language": "GDScript",
+"path": "res://Zombie/ZombieSpawner.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
 "Player": "",
-"Weapon": ""
+"Weapon": "",
+"ZombieSpawner": ""
 }
 
 [application]
@@ -81,6 +87,11 @@ weapon_slot_1={
 weapon_slot_2={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":50,"unicode":0,"echo":false,"script":null)
+ ]
+}
+weapon_slot_3={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":51,"unicode":0,"echo":false,"script":null)
  ]
 }
 

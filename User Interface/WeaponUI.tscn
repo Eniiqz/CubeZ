@@ -1,0 +1,21 @@
+[gd_scene format=2]
+
+[node name="WeaponUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CurrentAmmo" type="Label" parent="."]
+margin_left = 15.1021
+margin_top = 500.253
+margin_right = 94.1021
+margin_bottom = 531.253
+text = "000 / 000
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

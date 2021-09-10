@@ -1,15 +1,16 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Weapons/Weapon.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Weapons/WeaponManager.gd" type="Script" id=3]
 [ext_resource path="res://TDS Assets/PNG/weapon_gun.png" type="Texture" id=4]
 [ext_resource path="res://Weapons/SMG/SMG.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Weapons/Burst AR/Burst AR.tscn" type="PackedScene" id=6]
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="CubeMesh" id=1]
 size = Vector3( 40, 40, 40 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 20, 20 )
 
 [node name="Player" type="KinematicBody2D" groups=[
@@ -27,7 +28,7 @@ fire_rate = 500
 damage = 23
 max_range = 1450
 reload_time = 2.4
-bullet_velocity = 500
+bullet_velocity = 50
 
 [node name="Sprite" parent="WeaponManager/Pistol" index="1"]
 texture = ExtResource( 4 )
@@ -45,15 +46,22 @@ default_color = Color( 1, 1, 1, 1 )
 [node name="Reload" parent="WeaponManager/SMG" index="4"]
 one_shot = false
 
+[node name="Burst AR" parent="WeaponManager" instance=ExtResource( 6 )]
+default_ammo_in_mag = 30
+default_ammo_reserve = 120
+fire_rate = 700
+fire_mode = 2
+damage = 19
+max_range = 2500
+reload_time = 4.3
+bullet_velocity = 500
+shots_in_burst = 3
+
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
-
-[node name="RayCast2D" type="RayCast2D" parent="."]
-cast_to = Vector2( 750, 0 )
-collision_mask = 6
+shape = SubResource( 2 )
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
 
@@ -62,3 +70,4 @@ one_shot = true
 
 [editable path="WeaponManager/Pistol"]
 [editable path="WeaponManager/SMG"]
+[editable path="WeaponManager/Burst AR"]

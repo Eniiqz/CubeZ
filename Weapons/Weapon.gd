@@ -3,8 +3,8 @@ class_name Weapon
 
 
 onready var ShootCooldown = get_node("ShootCooldown")
+onready var BurstCooldown = get_node("BurstCooldown")
 onready var ReloadTimer = get_node("Reload")
-onready var PlayerRaycast = get_parent().PlayerRaycast
 onready var WeaponLine = get_node("Line2D")
 onready var WeaponEnd = get_node("WeaponEnd")
 
@@ -28,6 +28,11 @@ export (bool) var can_shoot = false
 export (bool) var is_shotgun = false
 export (bool) var is_equipped = false
 
+export (int) var shots_in_burst
+export (float) var shot_delay
+export (float) var burst_delay
+export (bool) var burst_finished = true
+
 signal weapon_ammo_changed(new_ammo_count)
 signal weapon_out_of_ammo
 signal weapon_fire_mode_changed(new_fire_mode)
@@ -37,6 +42,9 @@ func _ready():
 	can_shoot = true
 	current_ammo_in_mag = default_ammo_in_mag
 	current_ammo_reserve = default_ammo_reserve
+	shot_delay = (60 / float(fire_rate))
+	if fire_mode == 2:
+		burst_delay = shot_delay * shots_in_burst + 0.25
 	WeaponLine.set_point_position(0, WeaponEnd.position)
 	ReloadTimer.connect("timeout", self, "_finish_reload")
 
@@ -60,10 +68,10 @@ func reload():
 		ReloadTimer.start(reload_time)
 
 func shoot():
-	if can_shoot and current_ammo_in_mag != 0 and ShootCooldown.is_stopped():
-		current_ammo_in_mag -= 1
-		print("CURRENT AMMO: ", current_ammo_in_mag, " ", current_ammo_reserve)
-		ShootCooldown.start(60/float(fire_rate))
+	if can_shoot and current_ammo_in_mag > 0 and ShootCooldown.is_stopped():
 		emit_signal("weapon_fired")
+		ShootCooldown.start(shot_delay)
+		current_ammo_in_mag -= 1
+		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")
 		if current_ammo_in_mag == 0:
 			reload()
