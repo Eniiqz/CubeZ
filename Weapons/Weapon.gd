@@ -67,7 +67,10 @@ func reload():
 	if current_ammo_in_mag < default_ammo_in_mag:
 		ReloadTimer.start(reload_time)
 
+
+var times_called = 0
 func shoot():
+	times_called += 1
 	if can_shoot and current_ammo_in_mag > 0 and ShootCooldown.is_stopped():
 		emit_signal("weapon_fired")
 		ShootCooldown.start(shot_delay)
@@ -75,4 +78,6 @@ func shoot():
 		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")
 		if current_ammo_in_mag == 0:
 			reload()
+		if fire_mode == 2:
+			yield(BurstCooldown, "timeout")
 		return true

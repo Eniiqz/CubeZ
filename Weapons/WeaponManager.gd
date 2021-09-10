@@ -77,6 +77,8 @@ func _input(event: InputEvent):
 						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
 						yield(current_weapon.BurstCooldown, "timeout")
 						print(shot_counter)
+						print(current_weapon.times_called)
+						current_weapon.times_called = 0
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):
