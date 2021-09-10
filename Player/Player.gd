@@ -21,6 +21,8 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
+onready var WeaponUI = preload("res://User Interface/WeaponUI.tscn")
+
 
 signal on_damage
 signal on_health_given
@@ -33,6 +35,7 @@ func _ready():
 	can_look = true
 	can_sprint = true
 	PlayerCamera.current = true
+	
 
 var velocity = Vector2()
 

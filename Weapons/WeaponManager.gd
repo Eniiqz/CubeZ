@@ -5,8 +5,9 @@ signal weapon_fired
 
 onready var current_weapon
 onready var weapons = []
-
+onready var active_bullets = []
 onready var Player = get_parent()
+
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
@@ -39,9 +40,10 @@ func switch_weapon(weapon):
 
 func _create_bullet():
 	var NewBullet = Bullet.instance()
+	active_bullets.append(NewBullet)
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
-	Player.owner.add_child(NewBullet)
+	Player.get_parent().add_child(NewBullet)
 	NewBullet.position = bullet_start_pos
 	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
