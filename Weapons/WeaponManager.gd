@@ -1,7 +1,7 @@
 extends Node2D
 
 signal weapon_changed(new_weapon)
-signal weapon_fired(weaponed_fired)
+signal weapon_fired
 
 onready var current_weapon
 onready var weapons = []
@@ -36,10 +36,6 @@ func switch_weapon(weapon):
 		print(current_weapon.name)
 		current_weapon.connect("weapon_fired", self, "send_signal_up")
 		
-func _shoot():
-	current_weapon.shoot()
-	if current_weapon.current_ammo_in_mag > 0:
-		_create_bullet()
 
 func _create_bullet():
 	var NewBullet = Bullet.instance()
@@ -55,7 +51,8 @@ func on_bullet_hit(object_hit):
 		object_hit.health -= current_weapon.damage
 
 func send_signal_up():
-	pass
+	if current_weapon.current_ammo_in_mag > 0:
+		_create_bullet()
 
 func _process(delta):
 	if current_weapon != null:
@@ -64,19 +61,19 @@ func _process(delta):
 		if Input.is_action_pressed("weapon_shoot"):
 			match current_weapon.fire_mode:
 				1:
-					_shoot()
+					current_weapon.shoot()
 				2:
 					if current_weapon.BurstCooldown.is_stopped():
 						for shot in current_weapon.shots_in_burst:
-							_shoot()
-							#current_weapon.ShootCooldown.start(current_weapon.shot_delay)
+							current_weapon.shoot()
+							yield(current_weapon.ShootCooldown, "timeout")
 						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
 					# Handle burst fire
 
 func _input(event: InputEvent):
 	if current_weapon != null:
 		if current_weapon.fire_mode == 0 and event.is_action_released("weapon_shoot"):
-			_shoot()
+			current_weapon.shoot()
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):

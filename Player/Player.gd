@@ -19,8 +19,6 @@ export var health = 100
 export var max_health = 100
 var previous_health
 
-onready var PlayerRaycast = get_node("RayCast2D")
-onready var PlayerArea = get_node("Area2D")
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
 
