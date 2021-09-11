@@ -29,7 +29,7 @@ fire_rate = 500
 damage = 23
 max_range = 1450
 reload_time = 2.4
-bullet_velocity = 670
+bullet_velocity = 1200
 
 [node name="Sprite" parent="WeaponManager/Pistol" index="1"]
 texture = ExtResource( 4 )
