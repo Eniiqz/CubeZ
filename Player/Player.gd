@@ -21,7 +21,7 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
-onready var WeaponUI = preload("res://User Interface/WeaponUI.tscn")
+onready var Interface = preload("res://User Interface/Interface.tscn")
 
 
 signal on_damage
