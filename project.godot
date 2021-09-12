@@ -38,13 +38,13 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Top Down Shooter"
+config/name="CubeZ"
 run/main_scene="res://World/World.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Hud="*res://User Interface/HUD.tscn"
+Hud="res://User Interface/HUD.tscn"
 
 [display]
 

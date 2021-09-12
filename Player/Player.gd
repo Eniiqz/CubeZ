@@ -21,7 +21,9 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
-onready var Interface = preload("res://User Interface/Interface.tscn")
+onready var HUD = preload("res://User Interface/HUD.tscn")
+
+onready var PlayerHUD
 
 
 signal on_damage
@@ -35,7 +37,8 @@ func _ready():
 	can_look = true
 	can_sprint = true
 	PlayerCamera.current = true
-	
+	PlayerHUD = HUD.instance()
+	get_parent().add_child(PlayerHUD)
 
 var velocity = Vector2()
 

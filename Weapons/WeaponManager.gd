@@ -7,6 +7,7 @@ onready var current_weapon
 onready var weapons = []
 onready var active_bullets = []
 onready var Player = get_parent()
+onready var PlayerHUD = Player.PlayerHUD
 
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
@@ -16,28 +17,26 @@ func _ready():
 		weapon.hide()
 	if not current_weapon:
 		switch_weapon($Pistol)
-	current_weapon.show()
 	set_process_input(true)
 
-func switch_weapon(weapon):
-	if weapon != current_weapon and current_weapon != null:
-		current_weapon.disconnect("weapon_fired", self, "send_signal_up") 
-		current_weapon.hide()
-		current_weapon.is_equipped = false
-		weapon.show()
-		emit_signal("weapon_changed", weapon)
-		current_weapon = weapon
-		current_weapon.is_equipped = true
-	elif current_weapon == null:
-		current_weapon = weapon
-		current_weapon.is_equipped = true
-		current_weapon.show()
-		emit_signal("weapon_changed", current_weapon)
-	if not current_weapon.is_connected("weapon_fired", self, "send_signal_up"):
-		print(current_weapon.name)
-		current_weapon.connect("weapon_fired", self, "send_signal_up")
-		
 
+
+func switch_weapon(new_weapon):
+	var previous_weapon = current_weapon
+	if new_weapon != previous_weapon:
+		if previous_weapon != null:
+			previous_weapon.hide()
+			if previous_weapon.is_connected("weapon_fired", self, "send_signal_up"):
+				previous_weapon.disconnect("weapon_fired", self, "send_signal_up")
+		current_weapon = new_weapon
+		new_weapon.show()
+		PlayerHUD.update_hud("Ammo", new_weapon.current_ammo_in_mag)
+		PlayerHUD.update_hud("Reserve", new_weapon.current_ammo_reserve)
+		if not new_weapon.is_connected("weapon_fired", self, "send_signal_up"):
+			new_weapon.connect("weapon_fired", self, "send_signal_up")
+		emit_signal("weapon_changed", new_weapon)
+		
+		
 func _create_bullet():
 	var NewBullet = Bullet.instance()
 	active_bullets.append(NewBullet)
