@@ -21,6 +21,7 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
+onready var WeaponManager = get_node("WeaponManager")
 onready var HUD = preload("res://User Interface/HUD.tscn")
 
 onready var PlayerHUD
@@ -29,15 +30,23 @@ onready var PlayerHUD
 signal on_damage
 signal on_health_given
 signal on_death
+signal on_weapon_changed
+signal on_weapon_fired
 
+func _make_connections():
+	WeaponManager.connect("weapon_fired", self, "on_weapon_fired")
+	WeaponManager.connect("weapon_changed", self, "on_weapon_changed")
 
 func _ready():
+	_make_connections()
 	can_move = true
 	can_shoot = true
 	can_look = true
 	can_sprint = true
 	PlayerCamera.current = true
 	PlayerHUD = HUD.instance()
+	PlayerHUD.set_player(self)
+	PlayerHUD.make_connections()
 	get_parent().add_child(PlayerHUD)
 
 var velocity = Vector2()
@@ -70,6 +79,13 @@ func on_health_update():
 		health_given()
 	if health <= 0:
 		dead()
+
+func on_weapon_fired(weapon):
+	emit_signal("on_weapon_fired", weapon)
+	
+func on_weapon_changed(new_weapon):
+	emit_signal("on_weapon_changed", new_weapon)
+	
 
 func _physics_process(delta):
 	velocity = Vector2()

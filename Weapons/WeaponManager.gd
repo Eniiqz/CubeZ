@@ -1,7 +1,8 @@
 extends Node2D
 
 signal weapon_changed(new_weapon)
-signal weapon_fired
+signal weapon_fired(weapon)
+signal weapon_ammo_changed(weapon, new_ammo, new_reserve)
 
 onready var current_weapon
 onready var weapons = []
@@ -10,6 +11,9 @@ onready var Player = get_parent()
 onready var PlayerHUD = Player.PlayerHUD
 
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
+
+func make_connections():
+	current_weapon.connect()
 
 func _ready():
 	weapons = get_children()
@@ -30,8 +34,8 @@ func switch_weapon(new_weapon):
 				previous_weapon.disconnect("weapon_fired", self, "send_signal_up")
 		current_weapon = new_weapon
 		new_weapon.show()
-		PlayerHUD.update_hud("Ammo", new_weapon.current_ammo_in_mag)
-		PlayerHUD.update_hud("Reserve", new_weapon.current_ammo_reserve)
+		#PlayerHUD.update_hud("Ammo", new_weapon.current_ammo_in_mag)
+		#PlayerHUD.update_hud("Reserve", new_weapon.current_ammo_reserve)
 		if not new_weapon.is_connected("weapon_fired", self, "send_signal_up"):
 			new_weapon.connect("weapon_fired", self, "send_signal_up")
 		emit_signal("weapon_changed", new_weapon)
@@ -54,6 +58,7 @@ func on_bullet_hit(object_hit):
 func send_signal_up():
 	if current_weapon.current_ammo_in_mag > 0:
 		_create_bullet()
+		emit_signal("weapon_fired", current_weapon)
 
 func _process(delta):
 	if current_weapon != null:

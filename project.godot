@@ -42,10 +42,6 @@ config/name="CubeZ"
 run/main_scene="res://World/World.tscn"
 config/icon="res://icon.png"
 
-[autoload]
-
-Hud="res://User Interface/HUD.tscn"
-
 [display]
 
 window/size/width=1280
