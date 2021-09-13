@@ -26,19 +26,7 @@ onready var HUD = preload("res://User Interface/HUD.tscn")
 
 onready var PlayerHUD
 
-
-signal on_damage
-signal on_health_given
-signal on_death
-signal on_weapon_changed
-signal on_weapon_fired
-
-func _make_connections():
-	WeaponManager.connect("weapon_fired", self, "on_weapon_fired")
-	WeaponManager.connect("weapon_changed", self, "on_weapon_changed")
-
 func _ready():
-	_make_connections()
 	can_move = true
 	can_shoot = true
 	can_look = true
@@ -67,6 +55,7 @@ func dead():
 func set_health(new_health):
 	previous_health = health
 	health = max(0, new_health)
+	GlobalSignal.emit_signal("health_changed", self, new_health)
 	on_health_update()
 		
 func get_health():
