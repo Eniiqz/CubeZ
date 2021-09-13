@@ -7,7 +7,6 @@ onready var Player = get_parent()
 
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
-
 func _ready():
 	GlobalSignal.connect("weapon_fired", self, "on_weapon_fired")
 	weapons = get_children()
@@ -16,11 +15,9 @@ func _ready():
 	if not current_weapon:
 		switch_weapon($Pistol)
 	set_process_input(true)
-
-
+	
 
 func switch_weapon(new_weapon):
-	print("called")
 	var previous_weapon = current_weapon
 	if new_weapon != previous_weapon:
 		if previous_weapon != null:
@@ -28,9 +25,7 @@ func switch_weapon(new_weapon):
 		current_weapon = new_weapon
 		new_weapon.show()
 		GlobalSignal.emit_signal("weapon_changed", previous_weapon, new_weapon)
-		print("sent signal")
-		
-		
+
 func _create_bullet():
 	var NewBullet = Bullet.instance()
 	active_bullets.append(NewBullet)
@@ -41,13 +36,18 @@ func _create_bullet():
 	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
-func on_bullet_hit(object_hit):
+func on_bullet_hit(bullet, object_hit):
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
+	if bullet.is_connected("bullet_hit", self, "on_bullet_hit"):
+		bullet.disconnect("bullet_hit", self, "on_bullet_hit")
+	bullet.queue_free()
 
 func on_weapon_fired(weapon):
-	if weapon == current_weapon and weapon.current_ammo_in_mag > 0:
+	if weapon == current_weapon:
 		_create_bullet()
+		if weapon.current_ammo_in_mag == 0:
+			weapon.reload()
 
 func _process(delta):
 	if current_weapon != null:

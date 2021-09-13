@@ -69,5 +69,3 @@ func shoot():
 		GlobalSignal.emit_signal("weapon_fired", self)
 		GlobalSignal.emit_signal("weapon_ammo_changed", self, current_ammo_in_mag, current_ammo_reserve)
 		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")
-		if current_ammo_in_mag == 0:
-			reload()

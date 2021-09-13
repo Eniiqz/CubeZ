@@ -38,6 +38,7 @@ texture = ExtResource( 4 )
 position = Vector2( 9.5, 0 )
 
 [node name="SMG" parent="WeaponManager" instance=ExtResource( 5 )]
+fire_rate = 800
 max_range = 1500
 bullet_velocity = 750
 

@@ -24,9 +24,6 @@ func on_weapon_changed(previous_weapon, new_weapon):
 	update_hud("Ammo", new_weapon.current_ammo_in_mag)
 	update_hud("Reserve", new_weapon.current_ammo_reserve)
 
-func on_weapon_fired(weapon):
-	update_hud("Ammo", weapon.current_ammo_in_mag)
-
 func on_weapon_ammo_changed(weapon, new_ammo, new_reserve):
 	update_hud("Ammo", new_ammo)
 	update_hud("Reserve", new_reserve)

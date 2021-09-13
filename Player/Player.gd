@@ -56,7 +56,6 @@ func on_health_update():
 		GlobalSignal.emit_signal("health_changed", self, health)
 	if health <= 0:
 		dead()
-
 func _physics_process(delta):
 	velocity = Vector2()
 	if can_move:
