@@ -57,7 +57,7 @@ func _finish_reload():
 		current_ammo_reserve = 0
 	if current_ammo_reserve != original_reserve:
 		GlobalSignal.emit_signal("weapon_ammo_changed", current_ammo_in_mag, current_ammo_reserve)
-		GlobalSignal.emit_signal("weapon_reloaded")
+		GlobalSignal.emit_signal("weapon_reloaded", self)
 func reload():
 	if current_ammo_in_mag < default_ammo_in_mag:
 		ReloadTimer.start(reload_time)
@@ -67,7 +67,7 @@ func shoot():
 		ShootCooldown.start(shot_delay)
 		current_ammo_in_mag -= 1
 		GlobalSignal.emit_signal("weapon_fired", self)
-		GlobalSignal.emit_signal("weapon_ammo_changed", current_ammo_in_mag, current_ammo_reserve)
+		GlobalSignal.emit_signal("weapon_ammo_changed", self, current_ammo_in_mag, current_ammo_reserve)
 		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")
 		if current_ammo_in_mag == 0:
 			reload()

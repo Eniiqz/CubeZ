@@ -1,21 +1,15 @@
 extends Node2D
 
-signal weapon_changed(new_weapon)
-signal weapon_fired(weapon)
-signal weapon_ammo_changed(weapon, new_ammo, new_reserve)
-
 onready var current_weapon
 onready var weapons = []
 onready var active_bullets = []
 onready var Player = get_parent()
-onready var PlayerHUD = Player.PlayerHUD
 
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
-func make_connections():
-	current_weapon.connect()
 
 func _ready():
+	GlobalSignal.connect("weapon_fired", self, "on_weapon_fired")
 	weapons = get_children()
 	for weapon in weapons:
 		weapon.hide()
@@ -26,19 +20,15 @@ func _ready():
 
 
 func switch_weapon(new_weapon):
+	print("called")
 	var previous_weapon = current_weapon
 	if new_weapon != previous_weapon:
 		if previous_weapon != null:
 			previous_weapon.hide()
-			if previous_weapon.is_connected("weapon_fired", self, "send_signal_up"):
-				previous_weapon.disconnect("weapon_fired", self, "send_signal_up")
 		current_weapon = new_weapon
 		new_weapon.show()
-		#PlayerHUD.update_hud("Ammo", new_weapon.current_ammo_in_mag)
-		#PlayerHUD.update_hud("Reserve", new_weapon.current_ammo_reserve)
-		if not new_weapon.is_connected("weapon_fired", self, "send_signal_up"):
-			new_weapon.connect("weapon_fired", self, "send_signal_up")
-		emit_signal("weapon_changed", new_weapon)
+		GlobalSignal.emit_signal("weapon_changed", previous_weapon, new_weapon)
+		print("sent signal")
 		
 		
 func _create_bullet():
@@ -55,10 +45,9 @@ func on_bullet_hit(object_hit):
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
 
-func send_signal_up():
-	if current_weapon.current_ammo_in_mag > 0:
+func on_weapon_fired(weapon):
+	if weapon == current_weapon and weapon.current_ammo_in_mag > 0:
 		_create_bullet()
-		emit_signal("weapon_fired", current_weapon)
 
 func _process(delta):
 	if current_weapon != null:

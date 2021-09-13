@@ -34,47 +34,28 @@ func _ready():
 	PlayerCamera.current = true
 	PlayerHUD = HUD.instance()
 	PlayerHUD.set_player(self)
-	PlayerHUD.make_connections()
 	get_parent().add_child(PlayerHUD)
 
 var velocity = Vector2()
 
 
-func damage_taken():
-	emit_signal("on_damage")
-	print(health, " ", previous_health)
-
-func health_given():
-	emit_signal("on_health_given")
-	pass
-
 func dead():
-	emit_signal("on_death")
+	GlobalSignal.emit_signal("on_death", self)
 	queue_free()
 
 func set_health(new_health):
 	previous_health = health
 	health = max(0, new_health)
-	GlobalSignal.emit_signal("health_changed", self, new_health)
 	on_health_update()
 		
 func get_health():
 	return health
 
 func on_health_update():
-	if health != previous_health and health < previous_health:
-		damage_taken()
-	if health != previous_health and health > previous_health:
-		health_given()
+	if health != previous_health:
+		GlobalSignal.emit_signal("health_changed", self, health)
 	if health <= 0:
 		dead()
-
-func on_weapon_fired(weapon):
-	emit_signal("on_weapon_fired", weapon)
-	
-func on_weapon_changed(new_weapon):
-	emit_signal("on_weapon_changed", new_weapon)
-	
 
 func _physics_process(delta):
 	velocity = Vector2()
