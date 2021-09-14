@@ -16,7 +16,7 @@ func _ready():
 	pass
 
 func dead():
-	emit_signal("on_death")
+	GlobalSignal.emit_signal("on_death")
 	queue_free()
 
 func set_health(new_health):
@@ -29,7 +29,7 @@ func get_health():
 
 func on_health_update():
 	if health != previous_health:
-		GlobalSignal.emit_signal("health_changed", self)
+		GlobalSignal.emit_signal("health_changed", self, health)
 	if health <= 0:
 		dead()
 

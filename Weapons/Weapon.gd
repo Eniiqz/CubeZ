@@ -63,7 +63,7 @@ func _finish_reload():
 		current_ammo_in_mag += current_ammo_reserve
 		current_ammo_reserve = 0
 	if current_ammo_reserve != original_reserve:
-		GlobalSignal.emit_signal("weapon_ammo_changed", current_ammo_in_mag, current_ammo_reserve)
+		GlobalSignal.emit_signal("weapon_ammo_changed", self, current_ammo_in_mag, current_ammo_reserve)
 		GlobalSignal.emit_signal("weapon_reloaded", self)
 	is_reloading = false
 	if fire_mode == 2:
