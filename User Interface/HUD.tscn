@@ -1,16 +1,28 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://User Interface/HUD.gd" type="Script" id=2]
+[ext_resource path="res://italic_font.tres" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_size = 1
+outline_color = Color( 0.423529, 0.0509804, 0.0352941, 1 )
+use_filter = true
+font_data = ExtResource( 3 )
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
 
 [node name="Ammo" type="Label" parent="."]
-margin_left = 1072.98
-margin_top = 642.727
-margin_right = 1131.98
-margin_bottom = 687.727
+anchor_left = 0.861
+anchor_top = 0.924
+anchor_right = 0.861
+anchor_bottom = 0.924
+margin_left = -29.1001
+margin_top = -22.553
+margin_right = 29.8999
+margin_bottom = 22.447
 custom_fonts/font = ExtResource( 1 )
 text = "30"
 align = 1
@@ -20,10 +32,14 @@ __meta__ = {
 }
 
 [node name="Slash" type="Label" parent="."]
-margin_left = 1142.52
-margin_top = 642.727
-margin_right = 1169.52
-margin_bottom = 687.727
+anchor_left = 0.903
+anchor_top = 0.924
+anchor_right = 0.903
+anchor_bottom = 0.924
+margin_left = -13.3201
+margin_top = -22.553
+margin_right = 13.6799
+margin_bottom = 22.447
 custom_fonts/font = ExtResource( 1 )
 text = "/"
 align = 1
@@ -32,11 +48,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Weapon" type="Label" parent="."]
+anchor_left = 0.911
+anchor_top = 0.885
+anchor_right = 0.911
+anchor_bottom = 0.885
+margin_left = -90.0801
+margin_top = -16.2
+margin_right = 90.9199
+margin_bottom = 16.8
+custom_fonts/font = SubResource( 1 )
+text = "None"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Reserve" type="Label" parent="."]
-margin_left = 1181.41
-margin_top = 642.727
-margin_right = 1259.41
-margin_bottom = 687.727
+anchor_left = 0.953
+anchor_top = 0.924
+anchor_right = 0.953
+anchor_bottom = 0.924
+margin_left = -38.4301
+margin_top = -22.553
+margin_right = 39.5699
+margin_bottom = 22.447
 custom_fonts/font = ExtResource( 1 )
 text = "120"
 align = 1

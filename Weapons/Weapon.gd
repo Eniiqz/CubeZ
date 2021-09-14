@@ -24,9 +24,12 @@ export (float) onready var reload_time
 export (int) onready var bullet_velocity
 
 export (bool) var can_shoot = false
+export (bool) var auto_reload = true
+
 
 export (bool) var is_shotgun = false
 export (bool) var is_equipped = false
+export (bool) var is_reloading = false
 
 export (int) var shots_in_burst
 export (float) var shot_delay
@@ -58,12 +61,15 @@ func _finish_reload():
 	if current_ammo_reserve != original_reserve:
 		GlobalSignal.emit_signal("weapon_ammo_changed", current_ammo_in_mag, current_ammo_reserve)
 		GlobalSignal.emit_signal("weapon_reloaded", self)
+	is_reloading = false
+
 func reload():
 	if current_ammo_in_mag < default_ammo_in_mag:
+		is_reloading = true
 		ReloadTimer.start(reload_time)
 
 func shoot():
-	if can_shoot and current_ammo_in_mag > 0 and ShootCooldown.is_stopped():
+	if can_shoot and not is_reloading and current_ammo_in_mag > 0 and ShootCooldown.is_stopped():
 		ShootCooldown.start(shot_delay)
 		current_ammo_in_mag -= 1
 		GlobalSignal.emit_signal("weapon_fired", self)

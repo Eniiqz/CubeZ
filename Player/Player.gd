@@ -35,6 +35,7 @@ func _ready():
 	PlayerHUD = HUD.instance()
 	PlayerHUD.set_player(self)
 	get_parent().add_child(PlayerHUD)
+	GlobalSignal.emit_signal("player_ready", self)
 
 var velocity = Vector2()
 
@@ -56,6 +57,7 @@ func on_health_update():
 		GlobalSignal.emit_signal("health_changed", self, health)
 	if health <= 0:
 		dead()
+
 func _physics_process(delta):
 	velocity = Vector2()
 	if can_move:

@@ -8,6 +8,7 @@ onready var Player = get_parent()
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
+	yield(GlobalSignal, "player_ready")
 	GlobalSignal.connect("weapon_fired", self, "on_weapon_fired")
 	weapons = get_children()
 	for weapon in weapons:
@@ -18,6 +19,9 @@ func _ready():
 	
 
 func switch_weapon(new_weapon):
+	if current_weapon != null and current_weapon.is_reloading:
+		current_weapon.ReloadTimer.stop()
+		current_weapon.is_reloading = false
 	var previous_weapon = current_weapon
 	if new_weapon != previous_weapon:
 		if previous_weapon != null:
@@ -46,8 +50,8 @@ func on_bullet_hit(bullet, object_hit):
 func on_weapon_fired(weapon):
 	if weapon == current_weapon:
 		_create_bullet()
-		if weapon.current_ammo_in_mag == 0:
-			weapon.reload()
+		if current_weapon.current_ammo_in_mag == 0 and current_weapon.auto_reload:
+			current_weapon.reload()
 
 func _process(delta):
 	if current_weapon != null:

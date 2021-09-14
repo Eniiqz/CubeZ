@@ -37,16 +37,16 @@ texture = ExtResource( 4 )
 [node name="WeaponEnd" parent="WeaponManager/Pistol" index="2"]
 position = Vector2( 9.5, 0 )
 
+[node name="Line2D" parent="WeaponManager/Pistol" index="3"]
+default_color = Color( 0.996078, 0.0509804, 0.0509804, 1 )
+
 [node name="SMG" parent="WeaponManager" instance=ExtResource( 5 )]
 fire_rate = 800
 max_range = 1500
-bullet_velocity = 750
+bullet_velocity = 1540
 
 [node name="Line2D" parent="WeaponManager/SMG" index="3"]
-default_color = Color( 1, 1, 1, 1 )
-
-[node name="Reload" parent="WeaponManager/SMG" index="4"]
-one_shot = false
+default_color = Color( 0.996078, 0.0509804, 0.0509804, 1 )
 
 [node name="Burst AR" parent="WeaponManager" instance=ExtResource( 6 )]
 default_ammo_in_mag = 30
@@ -56,7 +56,7 @@ fire_mode = 2
 damage = 19
 max_range = 2500
 reload_time = 4.3
-bullet_velocity = 500
+bullet_velocity = 2500
 shots_in_burst = 3
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
