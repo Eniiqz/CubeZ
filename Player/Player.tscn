@@ -39,7 +39,7 @@ position = Vector2( 9.5, 0 )
 
 [node name="SMG" parent="WeaponManager" instance=ExtResource( 5 )]
 fire_rate = 800
-max_range = 1500
+max_range = 1250
 bullet_velocity = 1540
 
 [node name="Burst AR" parent="WeaponManager" instance=ExtResource( 6 )]
@@ -50,8 +50,18 @@ fire_mode = 2
 damage = 19
 max_range = 2500
 reload_time = 4.3
-bullet_velocity = 2500
+bullet_velocity = 1500
 shots_in_burst = 3
+
+[node name="LMG" parent="WeaponManager" instance=ExtResource( 6 )]
+default_ammo_in_mag = 100
+default_ammo_reserve = 300
+fire_rate = 555
+fire_mode = 1
+damage = 23
+max_range = 2250
+reload_time = 6.5
+bullet_velocity = 1565
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 mesh = SubResource( 1 )
@@ -68,3 +78,4 @@ one_shot = true
 [editable path="WeaponManager/Pistol"]
 [editable path="WeaponManager/SMG"]
 [editable path="WeaponManager/Burst AR"]
+[editable path="WeaponManager/LMG"]

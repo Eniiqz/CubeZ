@@ -82,3 +82,5 @@ func _input(event: InputEvent):
 			switch_weapon(weapons[1])
 		elif event.is_action_pressed("weapon_slot_3"):
 			switch_weapon(weapons[2])
+		elif event.is_action_pressed("weapon_slot_4"):
+			switch_weapon(weapons[3])
