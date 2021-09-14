@@ -26,5 +26,6 @@ func _physics_process(delta: float) -> void:
 func _on_Bullet_body_entered(body: Node) -> void:
 	if body is KinematicBody2D and body.is_in_group("Zombie"):
 		emit_signal("bullet_hit", self, body)
+	print(body)
 	queue_free()
 	
