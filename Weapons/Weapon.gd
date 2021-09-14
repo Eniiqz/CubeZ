@@ -30,6 +30,7 @@ export (bool) var auto_reload = true
 export (bool) var is_shotgun = false
 export (bool) var is_equipped = false
 export (bool) var is_reloading = false
+export (bool) var is_bursting = false
 
 export (int) var shots_in_burst
 export (float) var shot_delay
@@ -45,7 +46,10 @@ func _ready():
 		burst_delay = shot_delay * shots_in_burst + 0.25
 	WeaponLine.set_point_position(0, WeaponEnd.position)
 	ReloadTimer.connect("timeout", self, "_finish_reload")
-
+	
+func cancel_reload():
+	ReloadTimer.stop()
+	is_reloading = false
 	
 func _finish_reload():
 	var rounds_needed = default_ammo_in_mag - current_ammo_in_mag
@@ -62,6 +66,8 @@ func _finish_reload():
 		GlobalSignal.emit_signal("weapon_ammo_changed", current_ammo_in_mag, current_ammo_reserve)
 		GlobalSignal.emit_signal("weapon_reloaded", self)
 	is_reloading = false
+	if fire_mode == 2:
+		is_bursting = false
 
 func reload():
 	if current_ammo_in_mag < default_ammo_in_mag:
@@ -69,6 +75,8 @@ func reload():
 		ReloadTimer.start(reload_time)
 
 func shoot():
+	if is_reloading and current_ammo_in_mag > 0:
+		cancel_reload()
 	if can_shoot and not is_reloading and current_ammo_in_mag > 0 and ShootCooldown.is_stopped():
 		ShootCooldown.start(shot_delay)
 		current_ammo_in_mag -= 1

@@ -20,8 +20,7 @@ func _ready():
 
 func switch_weapon(new_weapon):
 	if current_weapon != null and current_weapon.is_reloading:
-		current_weapon.ReloadTimer.stop()
-		current_weapon.is_reloading = false
+		current_weapon.cancel_reload()
 	var previous_weapon = current_weapon
 	if new_weapon != previous_weapon:
 		if previous_weapon != null:
@@ -53,6 +52,7 @@ func on_weapon_fired(weapon):
 		if current_weapon.current_ammo_in_mag == 0 and current_weapon.auto_reload:
 			current_weapon.reload()
 
+
 func _process(delta):
 	if current_weapon != null:
 		var line_offset = Player.get_node("CollisionShape2D").shape.get_extents()
@@ -60,7 +60,6 @@ func _process(delta):
 		if Input.is_action_pressed("weapon_shoot") and current_weapon.fire_mode == 1:
 			current_weapon.shoot()
 
-var can_burst = true
 func _input(event: InputEvent):
 	if current_weapon != null:
 		if event.is_action_released("weapon_shoot"):
@@ -68,13 +67,13 @@ func _input(event: InputEvent):
 				0:
 					current_weapon.shoot()
 				2:
-					if can_burst and current_weapon.BurstCooldown.is_stopped():
-						can_burst = false
+					if not current_weapon.is_bursting and current_weapon.BurstCooldown.is_stopped():
+						current_weapon.is_bursting = true
 						for shot in current_weapon.shots_in_burst:
 							current_weapon.shoot()
 							yield(current_weapon.ShootCooldown, "timeout")
 						current_weapon.BurstCooldown.start(current_weapon.burst_delay)
-						can_burst = true
+						current_weapon.is_bursting = false
 		elif event.is_action_released("weapon_reload"):
 			current_weapon.reload()
 		elif event.is_action_released("weapon_slot_1"):
