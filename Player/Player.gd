@@ -21,13 +21,10 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
-onready var WeaponUI = preload("res://User Interface/WeaponUI.tscn")
+onready var WeaponManager = get_node("WeaponManager")
+onready var HUD = preload("res://User Interface/HUD.tscn")
 
-
-signal on_damage
-signal on_health_given
-signal on_death
-
+onready var PlayerHUD
 
 func _ready():
 	can_move = true
@@ -35,21 +32,15 @@ func _ready():
 	can_look = true
 	can_sprint = true
 	PlayerCamera.current = true
-	
+	PlayerHUD = HUD.instance()
+	PlayerHUD.set_player(self)
+	get_parent().add_child(PlayerHUD)
 
 var velocity = Vector2()
 
 
-func damage_taken():
-	emit_signal("on_damage")
-	print(health, " ", previous_health)
-
-func health_given():
-	emit_signal("on_health_given")
-	pass
-
 func dead():
-	emit_signal("on_death")
+	GlobalSignal.emit_signal("on_death", self)
 	queue_free()
 
 func set_health(new_health):
@@ -61,13 +52,10 @@ func get_health():
 	return health
 
 func on_health_update():
-	if health != previous_health and health < previous_health:
-		damage_taken()
-	if health != previous_health and health > previous_health:
-		health_given()
+	if health != previous_health:
+		GlobalSignal.emit_signal("health_changed", self, health)
 	if health <= 0:
 		dead()
-
 func _physics_process(delta):
 	velocity = Vector2()
 	if can_move:

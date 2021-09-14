@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://User Interface/HUD.gd" type="Script" id=2]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource( 2 )
+
+[node name="Ammo" type="Label" parent="."]
+margin_left = 1072.98
+margin_top = 642.727
+margin_right = 1131.98
+margin_bottom = 687.727
+custom_fonts/font = ExtResource( 1 )
+text = "30"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slash" type="Label" parent="."]
+margin_left = 1142.52
+margin_top = 642.727
+margin_right = 1169.52
+margin_bottom = 687.727
+custom_fonts/font = ExtResource( 1 )
+text = "/"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Reserve" type="Label" parent="."]
+margin_left = 1181.41
+margin_top = 642.727
+margin_right = 1259.41
+margin_bottom = 687.727
+custom_fonts/font = ExtResource( 1 )
+text = "120"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -12,19 +12,7 @@ var previous_health = health
 
 onready var ZombieArea = get_node("Area2D")
 
-signal on_damage
-signal on_health_given
-signal on_death
-
 func _ready():
-	pass
-
-func damage_taken():
-	emit_signal("on_damage")
-	print(health, " ", previous_health)
-
-func health_given():
-	emit_signal("on_health_given")
 	pass
 
 func dead():
@@ -40,10 +28,8 @@ func get_health():
 	return health
 
 func on_health_update():
-	if health != previous_health and health < previous_health:
-		damage_taken()
-	if health != previous_health and health > previous_health:
-		health_given()
+	if health != previous_health:
+		GlobalSignal.emit_signal("health_changed", self)
 	if health <= 0:
 		dead()
 

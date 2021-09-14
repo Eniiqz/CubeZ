@@ -4,7 +4,7 @@ class_name Bullet
 var weapon_fired_from setget set_weapon_fired_from
 var direction = Vector2() setget set_direction
 
-signal bullet_hit(object_hit)
+signal bullet_hit(bullet, object_hit)
 
 func set_weapon_fired_from(current_weapon):
 	weapon_fired_from = current_weapon
@@ -25,6 +25,6 @@ func _physics_process(delta: float) -> void:
 
 func _on_Bullet_body_entered(body: Node) -> void:
 	if body is KinematicBody2D and body.is_in_group("Zombie"):
-		emit_signal("bullet_hit", body)
+		emit_signal("bullet_hit", self, body)
 	queue_free()
 	

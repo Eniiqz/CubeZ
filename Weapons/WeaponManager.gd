@@ -1,8 +1,5 @@
 extends Node2D
 
-signal weapon_changed(new_weapon)
-signal weapon_fired
-
 onready var current_weapon
 onready var weapons = []
 onready var active_bullets = []
@@ -11,32 +8,23 @@ onready var Player = get_parent()
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
+	GlobalSignal.connect("weapon_fired", self, "on_weapon_fired")
 	weapons = get_children()
 	for weapon in weapons:
 		weapon.hide()
 	if not current_weapon:
 		switch_weapon($Pistol)
-	current_weapon.show()
 	set_process_input(true)
+	
 
-func switch_weapon(weapon):
-	if weapon != current_weapon and current_weapon != null:
-		current_weapon.disconnect("weapon_fired", self, "send_signal_up") 
-		current_weapon.hide()
-		current_weapon.is_equipped = false
-		weapon.show()
-		emit_signal("weapon_changed", weapon)
-		current_weapon = weapon
-		current_weapon.is_equipped = true
-	elif current_weapon == null:
-		current_weapon = weapon
-		current_weapon.is_equipped = true
-		current_weapon.show()
-		emit_signal("weapon_changed", current_weapon)
-	if not current_weapon.is_connected("weapon_fired", self, "send_signal_up"):
-		print(current_weapon.name)
-		current_weapon.connect("weapon_fired", self, "send_signal_up")
-		
+func switch_weapon(new_weapon):
+	var previous_weapon = current_weapon
+	if new_weapon != previous_weapon:
+		if previous_weapon != null:
+			previous_weapon.hide()
+		current_weapon = new_weapon
+		new_weapon.show()
+		GlobalSignal.emit_signal("weapon_changed", previous_weapon, new_weapon)
 
 func _create_bullet():
 	var NewBullet = Bullet.instance()
@@ -48,13 +36,18 @@ func _create_bullet():
 	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
-func on_bullet_hit(object_hit):
+func on_bullet_hit(bullet, object_hit):
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
+	if bullet.is_connected("bullet_hit", self, "on_bullet_hit"):
+		bullet.disconnect("bullet_hit", self, "on_bullet_hit")
+	bullet.queue_free()
 
-func send_signal_up():
-	if current_weapon.current_ammo_in_mag > 0:
+func on_weapon_fired(weapon):
+	if weapon == current_weapon:
 		_create_bullet()
+		if weapon.current_ammo_in_mag == 0:
+			weapon.reload()
 
 func _process(delta):
 	if current_weapon != null:
