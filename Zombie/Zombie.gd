@@ -14,7 +14,7 @@ var previous_health = health
 onready var ZombieArea = get_node("Area2D")
 
 func _ready():
-	pass
+	GlobalSignal.connect("on_death", self, "on_object_death")
 
 func dead():
 	GlobalSignal.emit_signal("on_death")
@@ -27,6 +27,10 @@ func set_health(new_health):
 		
 func get_health():
 	return health
+
+func on_object_death(object):
+	if object == TargetedPlayer:
+		TargetedPlayer = null
 
 func on_health_update():
 	if health != previous_health:
@@ -58,7 +62,7 @@ func search_for_player():
 	
 func _physics_process(delta):
 	if not TargetedPlayer:
-		print(search_for_player())
+		TargetedPlayer = search_for_player()
 	if TargetedPlayer != null:
 		look_at(TargetedPlayer.position)
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()

@@ -7,4 +7,3 @@ script = ExtResource( 1 )
 spawn_time = 5
 
 [node name="SpawnTimer" type="Timer" parent="."]
-autostart = true
