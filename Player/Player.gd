@@ -78,11 +78,5 @@ func _physics_process(delta):
 			is_sprinting = false
 		if velocity != Vector2.ZERO:
 			velocity = move_and_slide(velocity.normalized() * move_speed * sprint_mult)
-		for i in get_slide_count():
-			var collision = get_slide_collision(i)
-			var collider = collision.collider
-			if collider.is_in_group("Zombie") and PlayerHitCooldown.is_stopped():
-				PlayerHitCooldown.start(hit_cooldown)
-				set_health(health - collider.damage)
 	if can_look:
 		look_at(get_global_mouse_position())

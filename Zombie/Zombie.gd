@@ -30,7 +30,7 @@ func get_health():
 
 func on_object_death(object):
 	if object == TargetedPlayer:
-		TargetedPlayer = null
+		TargetedPlayer = search_for_player() or null
 
 func on_health_update():
 	if health != previous_health:
@@ -38,19 +38,9 @@ func on_health_update():
 	if health <= 0:
 		dead()
 
-func _on_Area2D_body_entered(body: Node) -> void:
-	if body is KinematicBody2D and body.is_in_group("Player"):
-		TargetedPlayer = body
-	elif body is Node2D and body.is_in_group("Bullet"):
-		body.queue_free()
-		
-
-func _on_Area2D_body_exited(body: Node) -> void:
-	if TargetedPlayer == body:
-		TargetedPlayer = null
-
 func search_for_player():
 	var player_distances = {}
+	print(get_tree().get_nodes_in_group("Player"))
 	for Player in get_tree().get_nodes_in_group("Player"):
 		player_distances[Player] = Player.get_global_position().distance_to(self.get_global_position())
 	var min_value = player_distances.values().min()
@@ -67,3 +57,9 @@ func _physics_process(delta):
 		look_at(TargetedPlayer.position)
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
 		move_and_slide(speed * direction)
+		for i in get_slide_count():
+			var collision = get_slide_collision(i)
+			var collider = collision.collider
+			if collider.is_in_group("Player") and collider.PlayerHitCooldown.is_stopped():
+				collider.PlayerHitCooldown.start(collider.hit_cooldown)
+				collider.set_health(collider.health - damage)

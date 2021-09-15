@@ -12,6 +12,7 @@ func _ready():
 	SpawnTimer.connect("timeout", self, "spawn_zombie")
 
 func spawn_zombie():
-	print("zombie spawned", spawn_time)
+	get_parent().zombies_left += 1
 	var new_zombie = Zombie.instance()
 	get_parent().add_child(new_zombie)
+	print("spawned")
