@@ -2,7 +2,8 @@
 
 [ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://User Interface/HUD.gd" type="Script" id=2]
-[ext_resource path="res://italic_font.tres" type="DynamicFontData" id=3]
+[ext_resource path="res://User Interface/italic_font.tres" type="DynamicFontData" id=3]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 32

@@ -5,6 +5,7 @@ export var can_move = false
 export var can_look_at_player = false
 
 export var damage = 25
+export var speed = 150
 
 export var max_health = 100
 export var health  = 100 setget set_health, get_health
@@ -44,7 +45,21 @@ func _on_Area2D_body_exited(body: Node) -> void:
 	if TargetedPlayer == body:
 		TargetedPlayer = null
 
+func search_for_player():
+	var player_distances = {}
+	for Player in get_tree().get_nodes_in_group("Player"):
+		player_distances[Player] = Player.get_global_position().distance_to(self.get_global_position())
+	var min_value = player_distances.values().min()
+	for Player in player_distances:
+		var value = player_distances[Player]
+		if value == min_value:
+			return Player
+	
+	
 func _physics_process(delta):
+	if not TargetedPlayer:
+		print(search_for_player())
 	if TargetedPlayer != null:
 		look_at(TargetedPlayer.position)
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
+		move_and_slide(speed * direction)
