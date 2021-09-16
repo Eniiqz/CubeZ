@@ -23,17 +23,11 @@ _global_script_classes=[ {
 "class": "Weapon",
 "language": "GDScript",
 "path": "res://Weapons/Weapon.gd"
-}, {
-"base": "Node2D",
-"class": "ZombieSpawner",
-"language": "GDScript",
-"path": "res://Zombie/ZombieSpawner.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
 "Player": "",
-"Weapon": "",
-"ZombieSpawner": ""
+"Weapon": ""
 }
 
 [application]

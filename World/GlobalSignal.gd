@@ -8,4 +8,5 @@ signal weapon_ammo_changed(weapon, new_ammo, new_reserve)
 signal player_ready(player)
 
 signal health_changed(object, new_health)
-signal on_death(object)
+signal on_player_death(player)
+signal on_zombie_death(zombie)

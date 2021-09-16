@@ -1,5 +1,4 @@
 extends Node2D
-class_name ZombieSpawner
 
 onready var SpawnTimer = get_node("SpawnTimer")
 
@@ -14,5 +13,6 @@ func _ready():
 func spawn_zombie():
 	get_parent().zombies_left += 1
 	var new_zombie = Zombie.instance()
+	new_zombie.global_position = global_position
 	get_parent().add_child(new_zombie)
 	print("spawned")
