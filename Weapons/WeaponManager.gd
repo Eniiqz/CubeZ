@@ -34,8 +34,9 @@ func _create_bullet():
 	active_bullets.append(NewBullet)
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
+	print(bullet_start_pos)
 	Player.get_parent().add_child(NewBullet)
-	NewBullet.position = bullet_start_pos
+	NewBullet.set_global_position(bullet_start_pos)
 	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 

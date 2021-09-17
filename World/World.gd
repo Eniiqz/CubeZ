@@ -24,6 +24,7 @@ func _ready():
 	GlobalSignal.connect("on_zombie_death", self, "on_zombie_death")
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
 	GlobalSignal.connect("on_zombie_spawned", self, "on_zombie_spawned")
+	GlobalSignal.connect("on_powerup_touched", self, "on_powerup_touched")
 	spawn_player()
 	change_round()
 	
@@ -42,20 +43,22 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 	else:
 		return starting_num
 
-func calculate_drop_chance():
+func calculate_drop_chance(object_position):
 	var random_number = randi() % 6
 	var comparison_number = randi() % 6
 	if comparison_number == random_number:
 		var keys = Powerups.keys()
-		print(keys.count())
-		var get_random_index = randi() % keys.count() + 1
+		var get_random_index = randi() % keys.size() + 1
 		print(get_random_index)
-		var random_powerup = keys[get_random_index]
-		print(random_powerup)
+		print(keys)
+		var random_powerup = keys[get_random_index - 1]
+		var new_powerup = Powerups[random_powerup].instance()
+		add_child(new_powerup)
+		new_powerup.set_global_position(object_position)
 
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
-		calculate_drop_chance()
+		calculate_drop_chance(object.get_global_position())
 		active_zombies -= 1
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
 			print("changing round")
@@ -67,6 +70,10 @@ func on_zombie_spawned(zombie):
 
 func on_player_death(player):
 	print(player.name, " has died.")
+
+func on_powerup_touched(powerup, player):
+	if powerup.name == "MaxAmmo":
+		pass
 
 func spawn_player():
 	var player = Player.instance()
