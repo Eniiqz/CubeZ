@@ -8,9 +8,9 @@ onready var RoundEnd = get_node("RoundEnd")
 
 export (int) var current_round
 
-export (int) var zombies_left
 export (int) var active_zombies
 export (int) var zombies_in_round
+export (int) var zombies_spawned_in_round
 
 func DEBUG(player):
 	player.invincible = true
@@ -18,15 +18,17 @@ func DEBUG(player):
 func _ready():
 	GlobalSignal.connect("on_zombie_death", self, "on_zombie_death")
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
-	current_round = 1
+	GlobalSignal.connect("on_zombie_spawned", self, "on_zombie_spawned")
 	spawn_player()
+	change_round()
 	
 func change_round():
-	if zombies_in_round == 0:
+	if zombies_spawned_in_round == zombies_in_round:
 		RoundEnd.start()
 		yield(RoundEnd, "timeout")
 		current_round += 1
 		zombies_in_round = calculate_zombies_in_round(current_round)
+		zombies_spawned_in_round = 0
 
 func calculate_zombies_in_round(desired_round: int) -> int:
 	var starting_num = 6
@@ -34,14 +36,16 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 		return starting_num + (starting_num * desired_round)
 	else:
 		return starting_num
-	
+
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
-		zombies_left -= 1
 		active_zombies -= 1
-		if zombies_left == 0 and active_zombies == 0:
+		if active_zombies == 0:
+			print("changing round")
 			change_round()
-		print(zombies_left)
+
+func on_zombie_spawned(zombie):
+	pass
 
 func on_player_death(player):
 	print(player.name, " has died.")

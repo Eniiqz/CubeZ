@@ -10,4 +10,4 @@ signal round_ended
 signal health_changed(object, new_health)
 signal on_player_death(player)
 signal on_zombie_death(zombie)
-
+signal on_zombie_spawned(zombie)

@@ -1,7 +1,7 @@
 extends Node2D
 
 onready var SpawnTimer = get_node("SpawnTimer")
-
+onready var World = get_parent()
 export (int) onready var spawn_time
 
 const Zombie = preload("res://Zombie/Zombie.tscn")
@@ -11,10 +11,10 @@ func _ready():
 	SpawnTimer.connect("timeout", self, "spawn_zombie")
 
 func spawn_zombie():
-	if get_parent().zombies_left >= 1 and get_parent().active_zombies < 24 and get_parent().RoundEnd.is_stopped():
-		get_parent().zombies_left += 1
-		get_parent().active_zombies += 1
+	if World.zombies_spawned_in_round < World.zombies_in_round and World.active_zombies < 24 and World.RoundEnd.is_stopped():
+		World.zombies_spawned_in_round += 1
+		World.active_zombies += 1
 		var new_zombie = Zombie.instance()
 		new_zombie.global_position = global_position
-		get_parent().add_child(new_zombie)
+		World.add_child(new_zombie)
 		print("spawned")
