@@ -4,6 +4,7 @@ onready var Ammo = get_node("Ammo")
 onready var ReserveAmmo = get_node("Reserve")
 onready var Weapon = get_node("Weapon")
 onready var Health = get_node("Health")
+onready var RoundCounter = get_node("RoundCounter")
 
 var Player
 var CurrentWeapon
@@ -14,13 +15,17 @@ func _ready():
 	GlobalSignal.connect("weapon_changed", self, "on_weapon_changed")
 	GlobalSignal.connect("weapon_reloaded", self, "on_weapon_reloaded")
 	GlobalSignal.connect("health_changed", self, "on_health_changed")
+	GlobalSignal.connect("round_ended", self, "on_round_end")
 
 func set_player(new_player):
 	yield(self, "ready")
 	if Player != new_player:
 		Player = new_player
 		Health.set_value(float(Player.health))
-		
+
+func on_round_end(next_round):
+	update_hud("RoundCounter", next_round)
+
 func on_weapon_reloaded(weapon):
 	print(weapon, " reloaded")
 	if weapon == CurrentWeapon:

@@ -40,8 +40,9 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
 		active_zombies -= 1
-		if active_zombies == 0:
+		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
 			print("changing round")
+			GlobalSignal.emit_signal("round_ended", current_round + 1)
 			change_round()
 
 func on_zombie_spawned(zombie):
