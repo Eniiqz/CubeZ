@@ -80,7 +80,8 @@ func on_powerup_touched(powerup, player):
 				print(weapon.name, weapon.current_ammo_reserve, weapon.default_ammo_reserve)
 				weapon.current_ammo_reserve = weapon.default_ammo_reserve
 				GlobalSignal.emit_signal("weapon_ammo_changed", weapon, weapon.current_ammo_in_mag, weapon.current_ammo_reserve)
-
+	elif power.name == "Instakill":
+		
 func spawn_player():
 	var player = Player.instance()
 	add_child(player)

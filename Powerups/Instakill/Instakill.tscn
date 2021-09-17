@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Powerups/Powerup.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Powerups/Instakill/Pixel Art Skull.png" type="Texture" id=2]
+
+[sub_resource type="ArrayMesh" id=1]
+surfaces/0 = {
+"aabb": AABB( -16, -16, 0, 32, 32, 0 ),
+"array_data": PoolByteArray( 0, 0, 48, 65, 102, 102, 110, 193, 0, 0, 88, 63, 205, 204, 12, 61, 0, 0, 128, 65, 51, 51, 43, 193, 0, 0, 128, 63, 154, 153, 41, 62, 0, 0, 128, 65, 160, 153, 153, 63, 0, 0, 128, 63, 154, 153, 9, 63, 52, 51, 227, 64, 0, 0, 128, 65, 205, 204, 56, 63, 0, 0, 128, 63, 0, 0, 224, 192, 0, 0, 128, 65, 0, 0, 144, 62, 0, 0, 128, 63, 0, 0, 224, 192, 154, 153, 97, 65, 0, 0, 144, 62, 205, 204, 112, 63, 0, 0, 32, 193, 154, 153, 65, 65, 0, 0, 64, 62, 205, 204, 96, 63, 0, 0, 32, 193, 0, 0, 224, 64, 0, 0, 64, 62, 0, 0, 56, 63, 0, 0, 48, 193, 0, 0, 224, 64, 0, 0, 32, 62, 0, 0, 56, 63, 0, 0, 128, 193, 64, 51, 51, 63, 0, 0, 0, 0, 154, 153, 5, 63, 0, 0, 128, 193, 102, 102, 14, 193, 0, 0, 0, 0, 51, 51, 99, 62, 0, 0, 0, 193, 102, 102, 126, 193, 0, 0, 128, 62, 205, 204, 76, 59, 0, 0, 48, 65, 0, 0, 128, 193, 0, 0, 88, 63, 0, 0, 0, 0 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 9, 0, 10, 0, 11, 0, 11, 0, 12, 0, 0, 0, 0, 0, 2, 0, 4, 0, 7, 0, 9, 0, 11, 0, 0, 0, 4, 0, 5, 0, 5, 0, 7, 0, 11, 0, 11, 0, 0, 0, 5, 0 ),
+"blend_shape_data": [  ],
+"format": 262417,
+"index_count": 33,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 13
+}
+
+[node name="Instakill" instance=ExtResource( 1 )]
+
+[node name="Sprite" type="MeshInstance2D" parent="." index="2"]
+mesh = SubResource( 1 )
+texture = ExtResource( 2 )
+
+[node name="InstakillTimer" type="Timer" parent="." index="3"]
+wait_time = 30.0
+one_shot = true
