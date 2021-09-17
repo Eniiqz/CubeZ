@@ -43,11 +43,19 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 		return starting_num
 
 func calculate_drop_chance():
-	pass
+	var random_number = randi() % 6
+	var comparison_number = randi() % 6
+	if comparison_number == random_number:
+		var keys = Powerups.keys()
+		print(keys.count())
+		var get_random_index = randi() % keys.count() + 1
+		print(get_random_index)
+		var random_powerup = keys[get_random_index]
+		print(random_powerup)
 
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
-		
+		calculate_drop_chance()
 		active_zombies -= 1
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
 			print("changing round")
