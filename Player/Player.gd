@@ -45,6 +45,9 @@ func dead():
 	GlobalSignal.emit_signal("on_player_death", self)
 	queue_free()
 
+func get_weapons():
+	return WeaponManager.weapons
+
 func set_health(new_health):
 	previous_health = health
 	health = max(0, new_health)

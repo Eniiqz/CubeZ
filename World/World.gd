@@ -17,6 +17,8 @@ export (int) var active_zombies
 export (int) var zombies_in_round
 export (int) var zombies_spawned_in_round
 
+export (int) var powerup_chance = (50) + 1 # denominator, so like 1/50, use 50, do not change "+ 1"
+
 func DEBUG(player):
 	player.invincible = true
 
@@ -44,8 +46,8 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 		return starting_num
 
 func calculate_drop_chance(object_position):
-	var random_number = randi() % 6
-	var comparison_number = randi() % 6
+	var random_number = randi() % powerup_chance
+	var comparison_number = randi() % powerup_chance
 	if comparison_number == random_number:
 		var keys = Powerups.keys()
 		var get_random_index = randi() % keys.size() + 1
@@ -73,10 +75,14 @@ func on_player_death(player):
 
 func on_powerup_touched(powerup, player):
 	if powerup.name == "MaxAmmo":
-		pass
+		for _player in get_tree().get_nodes_in_group("Player"):
+			for weapon in _player.get_weapons():
+				print(weapon.name, weapon.current_ammo_reserve, weapon.default_ammo_reserve)
+				weapon.current_ammo_reserve = weapon.default_ammo_reserve
+				GlobalSignal.emit_signal("weapon_ammo_changed", weapon, weapon.current_ammo_in_mag, weapon.current_ammo_reserve)
 
 func spawn_player():
 	var player = Player.instance()
 	add_child(player)
 	player.set_global_position(PlayerSpawnLocation.get_global_position())
-	DEBUG(player)
+	#DEBUG(player)
