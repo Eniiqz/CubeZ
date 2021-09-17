@@ -11,8 +11,10 @@ func _ready():
 	SpawnTimer.connect("timeout", self, "spawn_zombie")
 
 func spawn_zombie():
-	get_parent().zombies_left += 1
-	var new_zombie = Zombie.instance()
-	new_zombie.global_position = global_position
-	get_parent().add_child(new_zombie)
-	print("spawned")
+	if get_parent().zombies_left >= 1 and get_parent().active_zombies < 24 and get_parent().RoundEnd.is_stopped():
+		get_parent().zombies_left += 1
+		get_parent().active_zombies += 1
+		var new_zombie = Zombie.instance()
+		new_zombie.global_position = global_position
+		get_parent().add_child(new_zombie)
+		print("spawned")

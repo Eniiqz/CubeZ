@@ -17,6 +17,7 @@ export var sprint_mult = 1
 
 export var health = 100
 export var max_health = 100
+export (bool) var invincible
 var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")

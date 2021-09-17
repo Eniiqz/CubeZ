@@ -8,8 +8,8 @@ export var can_look_at_player = false
 export var damage = 25
 export var speed = 150
 
-export var max_health = 100
-export var health  = 100 setget set_health, get_health
+export var max_health = 50
+export var health  = 50 setget set_health, get_health
 var previous_health = health
 
 func _ready():
@@ -57,7 +57,7 @@ func _physics_process(delta):
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			var collider = collision.collider
-			if collider.is_in_group("Player") and collider.PlayerHitCooldown.is_stopped():
+			if collider.is_in_group("Player") and collider.PlayerHitCooldown.is_stopped() and not collider.invincible:
 				collider.PlayerHitCooldown.start(collider.hit_cooldown)
 				collider.set_health(collider.health - damage)
 	else:
