@@ -21,11 +21,11 @@ func _physics_process(delta: float) -> void:
 		if distance_from_weapon > weapon_fired_from.max_range:
 			queue_free()
 
-
 func _on_Bullet_body_entered(body: Node) -> void:
 	if body is KinematicBody2D and body.is_in_group("Zombie"):
 		emit_signal("bullet_hit", self, body)
 	if body.is_in_group("Environment"):
-		print("hit environment, dying")
+		pass
+		# Add hit effects or something later on
 	queue_free()
 	

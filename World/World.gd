@@ -3,6 +3,11 @@ extends Node2D
 const Player = preload("res://Player/Player.tscn")
 const Zombie = preload("res://Zombie/Zombie.tscn")
 
+var Powerups = {
+	 "MaxAmmo": preload("res://Powerups/MaxAmmo/MaxAmmo.tscn"),
+}
+
+
 onready var PlayerSpawnLocation = get_node("PlayerSpawnLocation")
 onready var RoundEnd = get_node("RoundEnd")
 
@@ -37,8 +42,12 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 	else:
 		return starting_num
 
+func calculate_drop_chance():
+	pass
+
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
+		
 		active_zombies -= 1
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
 			print("changing round")
