@@ -75,6 +75,10 @@ z_index = 3
 [node name="HitCooldown" type="Timer" parent="."]
 one_shot = true
 
+[node name="RegenCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
 [editable path="WeaponManager/Pistol"]
 [editable path="WeaponManager/SMG"]
 [editable path="WeaponManager/Burst AR"]

@@ -12,10 +12,12 @@ onready var PlayerSpawnLocation = get_node("PlayerSpawnLocation")
 onready var RoundEnd = get_node("RoundEnd")
 
 export (int) var current_round
-
+export (int) var current_zombie_health
 export (int) var active_zombies
 export (int) var zombies_in_round
 export (int) var zombies_spawned_in_round
+
+
 
 export (int) var powerup_chance = (50) + 1 # denominator, so like 1/50, use 50, do not change "+ 1"
 
@@ -35,6 +37,9 @@ func change_round():
 		RoundEnd.start()
 		yield(RoundEnd, "timeout")
 		current_round += 1
+		current_zombie_health += 25
+		if current_round == 1:
+			current_zombie_health = 50
 		zombies_in_round = calculate_zombies_in_round(current_round)
 		zombies_spawned_in_round = 0
 
@@ -80,8 +85,20 @@ func on_powerup_touched(powerup, player):
 				print(weapon.name, weapon.current_ammo_reserve, weapon.default_ammo_reserve)
 				weapon.current_ammo_reserve = weapon.default_ammo_reserve
 				GlobalSignal.emit_signal("weapon_ammo_changed", weapon, weapon.current_ammo_in_mag, weapon.current_ammo_reserve)
-	elif power.name == "Instakill":
-		
+	elif powerup.name == "Instakill":
+		var InstaKillTimer = powerup.get_node("InstakillTimer")
+		InstaKillTimer.connect("timeout", self, "_disable_instakill")
+		InstaKillTimer.start()
+		var previous_zombie_health = get_tree().get_nodes_in_group("Zombie")[0].health
+		for zombie in get_tree().get_nodes_in_group("Zombie"):
+			zombie.health = 1
+
+func _disable_instakill(timer):
+	if timer.is_connected("timeout", self, "_disable_instakill"):
+		timer.disconnect("timeout", self, "_disable_instakill")
+		for zombie in get_tree().get_nodes_in_group("Zombie"):
+			zombie.health
+
 func spawn_player():
 	var player = Player.instance()
 	add_child(player)

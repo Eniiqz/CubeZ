@@ -8,6 +8,7 @@ export var can_move = false
 export var can_shoot = false
 export var can_look = false
 export var can_sprint = false
+export var can_regen = false
 
 export var is_sprinting = false
 export var is_shooting = false
@@ -22,6 +23,7 @@ var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
+onready var PlayerRegenCooldown = get_node("RegenCooldown")
 onready var WeaponManager = get_node("WeaponManager")
 onready var HUD = preload("res://User Interface/HUD.tscn")
 
@@ -32,6 +34,7 @@ func _ready():
 	can_shoot = true
 	can_look = true
 	can_sprint = true
+	can_regen = true
 	PlayerCamera.current = true
 	PlayerHUD = HUD.instance()
 	PlayerHUD.set_player(self)
@@ -59,10 +62,14 @@ func get_health():
 func on_health_update():
 	if health != previous_health:
 		GlobalSignal.emit_signal("health_changed", self, health)
+	if health < previous_health:
+		PlayerRegenCooldown.start()
 	if health <= 0:
 		dead()
 
 func _physics_process(delta):
+	if health != max_health and can_regen and PlayerRegenCooldown.is_stopped():
+		set_health(health + 15 * delta)
 	velocity = Vector2()
 	if can_move:
 		if Input.is_action_pressed("move_right"):
