@@ -21,7 +21,3 @@ surfaces/0 = {
 [node name="Sprite" type="MeshInstance2D" parent="." index="2"]
 mesh = SubResource( 1 )
 texture = ExtResource( 2 )
-
-[node name="InstakillTimer" type="Timer" parent="." index="3"]
-wait_time = 30.0
-one_shot = true

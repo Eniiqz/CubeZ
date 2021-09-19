@@ -15,6 +15,10 @@ func spawn_zombie():
 		World.zombies_spawned_in_round += 1
 		World.active_zombies += 1
 		var new_zombie = Zombie.instance()
+		if World.instakill_active:
+			new_zombie.health = 1
+		else:
+			new_zombie.health = World.current_zombie_health
 		new_zombie.global_position = global_position
 		World.add_child(new_zombie)
 		print("spawned")

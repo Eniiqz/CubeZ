@@ -7,6 +7,7 @@ onready var DespawnTimer = get_node("DespawnTimer")
 func _ready():
 	DespawnTimer.start()
 	GlobalSignal.emit_signal("on_powerup_spawned", self)
+	DespawnTimer.connect("timeout", self, "despawn")
 	
 func despawn():
 	queue_free()

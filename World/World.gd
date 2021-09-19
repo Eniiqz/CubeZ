@@ -4,12 +4,14 @@ const Player = preload("res://Player/Player.tscn")
 const Zombie = preload("res://Zombie/Zombie.tscn")
 
 var Powerups = {
-	 "MaxAmmo": preload("res://Powerups/MaxAmmo/MaxAmmo.tscn"),
+	"MaxAmmo": preload("res://Powerups/MaxAmmo/MaxAmmo.tscn"),
+	"Instakill": preload("res://Powerups/Instakill/Instakill.tscn")
 }
 
 
 onready var PlayerSpawnLocation = get_node("PlayerSpawnLocation")
 onready var RoundEnd = get_node("RoundEnd")
+onready var InstakillTimer = get_node("InstakillTimer")
 
 export (int) var current_round
 export (int) var current_zombie_health
@@ -20,15 +22,18 @@ export (int) var zombies_spawned_in_round
 
 
 export (int) var powerup_chance = (50) + 1 # denominator, so like 1/50, use 50, do not change "+ 1"
-
+export (bool) var instakill_active = false
 func DEBUG(player):
 	player.invincible = true
 
 func _ready():
+	randomize()
 	GlobalSignal.connect("on_zombie_death", self, "on_zombie_death")
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
 	GlobalSignal.connect("on_zombie_spawned", self, "on_zombie_spawned")
 	GlobalSignal.connect("on_powerup_touched", self, "on_powerup_touched")
+	InstakillTimer.connect("timeout", self, "_disable_instakill")
+	current_zombie_health = 50
 	spawn_player()
 	change_round()
 	
@@ -53,6 +58,7 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 func calculate_drop_chance(object_position):
 	var random_number = randi() % powerup_chance
 	var comparison_number = randi() % powerup_chance
+	print(random_number, " ", comparison_number)
 	if comparison_number == random_number:
 		var keys = Powerups.keys()
 		var get_random_index = randi() % keys.size() + 1
@@ -86,18 +92,16 @@ func on_powerup_touched(powerup, player):
 				weapon.current_ammo_reserve = weapon.default_ammo_reserve
 				GlobalSignal.emit_signal("weapon_ammo_changed", weapon, weapon.current_ammo_in_mag, weapon.current_ammo_reserve)
 	elif powerup.name == "Instakill":
-		var InstaKillTimer = powerup.get_node("InstakillTimer")
-		InstaKillTimer.connect("timeout", self, "_disable_instakill")
-		InstaKillTimer.start()
-		var previous_zombie_health = get_tree().get_nodes_in_group("Zombie")[0].health
+		InstakillTimer.start()
+		instakill_active = true
 		for zombie in get_tree().get_nodes_in_group("Zombie"):
 			zombie.health = 1
 
-func _disable_instakill(timer):
-	if timer.is_connected("timeout", self, "_disable_instakill"):
-		timer.disconnect("timeout", self, "_disable_instakill")
-		for zombie in get_tree().get_nodes_in_group("Zombie"):
-			zombie.health
+func _disable_instakill():
+	print("instakill over")
+	instakill_active = false
+	for zombie in get_tree().get_nodes_in_group("Zombie"):
+		zombie.health = current_zombie_health
 
 func spawn_player():
 	var player = Player.instance()

@@ -68,8 +68,8 @@ func on_health_update():
 		dead()
 
 func _physics_process(delta):
-	if health != max_health and can_regen and PlayerRegenCooldown.is_stopped():
-		set_health(health + 15 * delta)
+	if health < max_health and can_regen and PlayerRegenCooldown.is_stopped():
+		set_health(health + 25 * delta)
 	velocity = Vector2()
 	if can_move:
 		if Input.is_action_pressed("move_right"):

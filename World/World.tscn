@@ -5,6 +5,7 @@
 [ext_resource path="res://Zombie/ZombieSpawner.tscn" type="PackedScene" id=4]
 
 [node name="World" type="Node2D"]
+pause_mode = 1
 position = Vector2( 112, 64 )
 script = ExtResource( 3 )
 
@@ -62,4 +63,8 @@ position = Vector2( 1138.99, 157.367 )
 
 [node name="RoundEnd" type="Timer" parent="."]
 wait_time = 8.0
+one_shot = true
+
+[node name="InstakillTimer" type="Timer" parent="."]
+wait_time = 30.0
 one_shot = true
