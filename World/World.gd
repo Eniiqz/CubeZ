@@ -51,7 +51,7 @@ func change_round():
 func calculate_zombies_in_round(desired_round: int) -> int:
 	var starting_num = 6
 	if desired_round > 1:
-		return starting_num + (starting_num * desired_round)
+		return starting_num + ((starting_num * desired_round) / 2)
 	else:
 		return starting_num
 
@@ -67,7 +67,7 @@ func calculate_drop_chance(object_position):
 		new_powerup.set_global_position(object_position)
 
 func on_zombie_death(object):
-	if object.is_in_group("Zombie"):
+	if object.is_in_group("Zombie") and object.dead:
 		calculate_drop_chance(object.get_global_position())
 		active_zombies = max(0, active_zombies - 1)
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:

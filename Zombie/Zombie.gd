@@ -11,6 +11,7 @@ export (int) var speed
 export var max_health = 50
 export var health  = 50 setget set_health, get_health
 var previous_health = health
+var dead = false
 
 func _ready():
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
@@ -34,7 +35,8 @@ func on_player_death(player):
 func on_health_update():
 	if health != previous_health:
 		GlobalSignal.emit_signal("health_changed", self, health)
-	if health <= 0:
+	if health <= 0 and not dead:
+		dead = true
 		dead()
 
 func search_for_player():

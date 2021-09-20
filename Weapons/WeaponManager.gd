@@ -47,11 +47,11 @@ func _create_bullet(direction):
 func on_zombie_death(zombie):
 	last_zombie_killed = zombie
 
-
 func on_bullet_hit(bullet, object_hit):
-	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
+	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie") and not object_hit.dead:
 		object_hit.health -= current_weapon.damage
-		Player.set_points(Player.get_points() + 10)
+		if not current_weapon.is_shotgun:
+			Player.set_points(Player.get_points() + 10)
 		if last_zombie_killed == object_hit:
 			Player.set_points(Player.get_points() + 70)
 	if bullet.is_connected("bullet_hit", self, "on_bullet_hit"):
@@ -62,8 +62,7 @@ func on_weapon_fired(weapon):
 	if weapon == current_weapon:
 		if weapon.is_shotgun:
 			for shot in weapon.shots_in_burst:
-				print(shot)
-				var random_spread = Vector2(1, rand_range(0, 2))
+				var random_spread = Vector2(1, rand_range(0, rand_range(1, 3)))
 				_create_bullet(random_spread)
 		else:
 			_create_bullet(false)
