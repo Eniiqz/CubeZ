@@ -7,6 +7,7 @@ onready var Health = get_node("Health")
 onready var RoundCounter = get_node("RoundCounter")
 
 var Player
+var player_in_wallbuy_zone
 var CurrentWeapon
 
 func _ready():
@@ -15,6 +16,7 @@ func _ready():
 	GlobalSignal.connect("weapon_reloaded", self, "on_weapon_reloaded")
 	GlobalSignal.connect("health_changed", self, "on_health_changed")
 	GlobalSignal.connect("round_ended", self, "on_round_end")
+	GlobalSignal.connect("wallbuy_activated", self, "on_wallbuy_event")
 
 func set_player(new_player):
 	yield(self, "ready")
@@ -45,6 +47,15 @@ func on_health_changed(object, new_health):
 	if object == Player:
 		Health.set_value(float(new_health))
 
+func on_wallbuy_event(entering, player, wallbuy):
+	if player == Player:
+		player_in_wallbuy_zone = entering
+		# create prompt asking if they want to buy weapon
+
+func _input(event):
+	if player_in_wallbuy_zone and event.is_action_pressed("action_use"):
+		# buy weapon
+		pass
 
 func update_hud(node_name: String, new_value):
 	var node = get_node_or_null(node_name)

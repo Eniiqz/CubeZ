@@ -5,8 +5,8 @@ export onready var TargetedPlayer = null
 export var can_move = false
 export var can_look_at_player = false
 
-export var damage = 25
-export var speed = 150
+export var damage = 50
+export (int) var speed
 
 export var max_health = 50
 export var health  = 50 setget set_health, get_health

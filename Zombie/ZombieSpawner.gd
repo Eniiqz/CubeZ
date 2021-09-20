@@ -19,5 +19,9 @@ func spawn_zombie():
 			new_zombie.health = 1
 		else:
 			new_zombie.health = World.current_zombie_health
+		if World.current_round < 5:
+			new_zombie.speed = 75
+		else:
+			new_zombie.speed = 125
 		new_zombie.global_position = global_position
 		World.add_child(new_zombie)
