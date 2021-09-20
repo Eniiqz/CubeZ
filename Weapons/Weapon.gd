@@ -82,4 +82,3 @@ func shoot():
 		current_ammo_in_mag -= 1
 		GlobalSignal.emit_signal("weapon_fired", self)
 		GlobalSignal.emit_signal("weapon_ammo_changed", self, current_ammo_in_mag, current_ammo_reserve)
-		print("CURRENT AMMO: (", current_ammo_in_mag, " : ", current_ammo_reserve, ")")

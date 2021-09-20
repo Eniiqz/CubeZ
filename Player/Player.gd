@@ -1,8 +1,8 @@
 extends KinematicBody2D
 class_name Player
 
-export var move_speed = 150
-export var hit_cooldown = 0.5
+export (int) var move_speed = 150
+export (float) var hit_cooldown = 0.5
 
 export var can_move = false
 export var can_shoot = false
@@ -10,11 +10,14 @@ export var can_look = false
 export var can_sprint = false
 export var can_regen = false
 
-export var is_sprinting = false
-export var is_shooting = false
+export (bool) var is_sprinting = false
+export (bool) var is_shooting = false
 
-export var max_sprint_mult = 1.75
-export var sprint_mult = 1
+export (float) var max_sprint_mult = 1.75
+export (float)var sprint_mult = 1
+
+export (int) var points = 500 setget set_points, get_points
+export (int) var total_points = 500
 
 export var health = 100
 export var max_health = 100
@@ -39,7 +42,9 @@ func _ready():
 	PlayerHUD = HUD.instance()
 	PlayerHUD.set_player(self)
 	get_parent().add_child(PlayerHUD)
+	GlobalSignal.connect("points_changed", self, "on_points_changed")
 	GlobalSignal.emit_signal("player_ready", self)
+
 
 var velocity = Vector2()
 
@@ -66,6 +71,21 @@ func on_health_update():
 		PlayerRegenCooldown.start()
 	if health <= 0:
 		dead()
+
+func on_points_changed(player, previous_points, new_points):
+	if player == self:
+		if new_points > previous_points:
+			var diff = new_points - previous_points
+			total_points += diff
+	
+
+func set_points(new_points):
+	var previous_points = points
+	points = new_points
+	GlobalSignal.emit_signal("points_changed", self, previous_points, points)
+	
+func get_points():
+	return points
 
 func _physics_process(delta):
 	if health < max_health and can_regen and PlayerRegenCooldown.is_stopped():

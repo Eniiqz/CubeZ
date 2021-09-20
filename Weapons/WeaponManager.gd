@@ -4,12 +4,14 @@ onready var current_weapon
 onready var weapons = []
 onready var active_bullets = []
 onready var Player = get_parent()
+onready var last_zombie_killed
 
 export (PackedScene) var Bullet = preload("res://Bullet/Bullet.tscn")
 
 func _ready():
 	yield(GlobalSignal, "player_ready")
 	GlobalSignal.connect("weapon_fired", self, "on_weapon_fired")
+	GlobalSignal.connect("on_zombie_death", self, "on_zombie_death")
 	weapons = get_children()
 	for weapon in weapons:
 		weapon.hide()
@@ -34,15 +36,21 @@ func _create_bullet():
 	active_bullets.append(NewBullet)
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
-	print(bullet_start_pos)
 	Player.get_parent().add_child(NewBullet)
 	NewBullet.set_global_position(bullet_start_pos)
 	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
+func on_zombie_death(zombie):
+	last_zombie_killed = zombie
+
+
 func on_bullet_hit(bullet, object_hit):
 	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
 		object_hit.health -= current_weapon.damage
+		Player.set_points(Player.get_points() + 10)
+		if last_zombie_killed == object_hit:
+			Player.set_points(Player.get_points() + 70)
 	if bullet.is_connected("bullet_hit", self, "on_bullet_hit"):
 		bullet.disconnect("bullet_hit", self, "on_bullet_hit")
 	bullet.queue_free()

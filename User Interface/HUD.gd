@@ -10,7 +10,6 @@ var Player
 var CurrentWeapon
 
 func _ready():
-	print(Health)
 	GlobalSignal.connect("weapon_ammo_changed", self, "on_weapon_ammo_changed")
 	GlobalSignal.connect("weapon_changed", self, "on_weapon_changed")
 	GlobalSignal.connect("weapon_reloaded", self, "on_weapon_reloaded")
@@ -27,7 +26,6 @@ func on_round_end(next_round):
 	update_hud("RoundCounter", next_round)
 
 func on_weapon_reloaded(weapon):
-	print(weapon, " reloaded")
 	if weapon == CurrentWeapon:
 		update_hud("Ammo", weapon.current_ammo_in_mag)
 		update_hud("Reserve", weapon.current_ammo_reserve)
@@ -35,7 +33,6 @@ func on_weapon_reloaded(weapon):
 func on_weapon_changed(previous_weapon, new_weapon):
 	CurrentWeapon = new_weapon
 	Weapon.text = CurrentWeapon.name
-	print("weapon changed to: ", new_weapon.name)
 	update_hud("Ammo", new_weapon.current_ammo_in_mag)
 	update_hud("Reserve", new_weapon.current_ammo_reserve)
 

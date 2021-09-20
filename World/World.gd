@@ -58,12 +58,9 @@ func calculate_zombies_in_round(desired_round: int) -> int:
 func calculate_drop_chance(object_position):
 	var random_number = randi() % powerup_chance
 	var comparison_number = randi() % powerup_chance
-	print(random_number, " ", comparison_number)
 	if comparison_number == random_number:
 		var keys = Powerups.keys()
 		var get_random_index = randi() % keys.size() + 1
-		print(get_random_index)
-		print(keys)
 		var random_powerup = keys[get_random_index - 1]
 		var new_powerup = Powerups[random_powerup].instance()
 		add_child(new_powerup)
@@ -74,7 +71,6 @@ func on_zombie_death(object):
 		calculate_drop_chance(object.get_global_position())
 		active_zombies -= 1
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
-			print("changing round")
 			GlobalSignal.emit_signal("round_ended", current_round + 1)
 			change_round()
 
@@ -88,7 +84,6 @@ func on_powerup_touched(powerup, player):
 	if powerup.name == "MaxAmmo":
 		for _player in get_tree().get_nodes_in_group("Player"):
 			for weapon in _player.get_weapons():
-				print(weapon.name, weapon.current_ammo_reserve, weapon.default_ammo_reserve)
 				weapon.current_ammo_reserve = weapon.default_ammo_reserve
 				GlobalSignal.emit_signal("weapon_ammo_changed", weapon, weapon.current_ammo_in_mag, weapon.current_ammo_reserve)
 	elif powerup.name == "Instakill":

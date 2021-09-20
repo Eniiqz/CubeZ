@@ -21,4 +21,3 @@ func spawn_zombie():
 			new_zombie.health = World.current_zombie_health
 		new_zombie.global_position = global_position
 		World.add_child(new_zombie)
-		print("spawned")
