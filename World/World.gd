@@ -69,7 +69,7 @@ func calculate_drop_chance(object_position):
 func on_zombie_death(object):
 	if object.is_in_group("Zombie"):
 		calculate_drop_chance(object.get_global_position())
-		active_zombies -= 1
+		active_zombies = max(0, active_zombies - 1)
 		if zombies_spawned_in_round == zombies_in_round and active_zombies == 0:
 			GlobalSignal.emit_signal("round_ended", current_round + 1)
 			change_round()
