@@ -1,16 +1,31 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://User Interface/HUD.gd" type="Script" id=2]
+[ext_resource path="res://User Interface/italic_font.tres" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_size = 1
+outline_color = Color( 0.423529, 0.0509804, 0.0352941, 1 )
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.109804, 0.854902, 0.176471, 1 )
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
 
 [node name="Ammo" type="Label" parent="."]
-margin_left = 1072.98
-margin_top = 642.727
-margin_right = 1131.98
-margin_bottom = 687.727
+anchor_left = 0.857
+anchor_top = 0.925
+anchor_right = 0.857
+anchor_bottom = 0.925
+margin_left = -37.9911
+margin_top = -23.0001
+margin_right = 37.0089
+margin_bottom = 21.9999
 custom_fonts/font = ExtResource( 1 )
 text = "30"
 align = 1
@@ -19,11 +34,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="RoundCounter" type="Label" parent="."]
+anchor_left = 0.043
+anchor_top = 0.924
+anchor_right = 0.043
+anchor_bottom = 0.924
+margin_left = -6.926
+margin_top = -22.28
+margin_right = 7.074
+margin_bottom = 22.72
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.662745, 0.0431373, 0.0431373, 1 )
+text = "|"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Slash" type="Label" parent="."]
-margin_left = 1142.52
-margin_top = 642.727
-margin_right = 1169.52
-margin_bottom = 687.727
+anchor_left = 0.903
+anchor_top = 0.924
+anchor_right = 0.903
+anchor_bottom = 0.924
+margin_left = -13.3199
+margin_top = -22.28
+margin_right = 13.6801
+margin_bottom = 22.72
 custom_fonts/font = ExtResource( 1 )
 text = "/"
 align = 1
@@ -32,15 +69,53 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Weapon" type="Label" parent="."]
+anchor_left = 0.912
+anchor_top = 0.876
+anchor_right = 0.912
+anchor_bottom = 0.876
+margin_left = -98.3601
+margin_top = -16.72
+margin_right = 92.6399
+margin_bottom = 16.28
+custom_fonts/font = SubResource( 1 )
+text = "None"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Reserve" type="Label" parent="."]
-margin_left = 1181.41
-margin_top = 642.727
-margin_right = 1259.41
-margin_bottom = 687.727
+anchor_left = 0.953
+anchor_top = 0.924
+anchor_right = 0.953
+anchor_bottom = 0.924
+margin_left = -38.4299
+margin_top = -22.28
+margin_right = 39.5701
+margin_bottom = 22.72
 custom_fonts/font = ExtResource( 1 )
 text = "120"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
+}
+
+[node name="Health" type="ProgressBar" parent="."]
+anchor_left = 0.915
+anchor_top = 0.844
+anchor_right = 0.915
+anchor_bottom = 0.844
+margin_left = -99.4691
+margin_top = -6.92102
+margin_right = 100.531
+margin_bottom = 7.07898
+custom_styles/fg = SubResource( 2 )
+step = 1.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": "x"
 }

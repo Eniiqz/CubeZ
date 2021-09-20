@@ -1,26 +1,32 @@
 extends KinematicBody2D
 class_name Player
 
-export var move_speed = 150
-export var hit_cooldown = 0.5
+export (int) var move_speed = 150
+export (float) var hit_cooldown = 0.5
 
 export var can_move = false
 export var can_shoot = false
 export var can_look = false
 export var can_sprint = false
+export var can_regen = false
 
-export var is_sprinting = false
-export var is_shooting = false
+export (bool) var is_sprinting = false
+export (bool) var is_shooting = false
 
-export var max_sprint_mult = 1.75
-export var sprint_mult = 1
+export (float) var max_sprint_mult = 1.75
+export (float)var sprint_mult = 1
+
+export (int) var points = 500 setget set_points, get_points
+export (int) var total_points = 500
 
 export var health = 100
 export var max_health = 100
+export (bool) var invincible
 var previous_health
 
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
+onready var PlayerRegenCooldown = get_node("RegenCooldown")
 onready var WeaponManager = get_node("WeaponManager")
 onready var HUD = preload("res://User Interface/HUD.tscn")
 
@@ -31,17 +37,24 @@ func _ready():
 	can_shoot = true
 	can_look = true
 	can_sprint = true
+	can_regen = true
 	PlayerCamera.current = true
 	PlayerHUD = HUD.instance()
 	PlayerHUD.set_player(self)
 	get_parent().add_child(PlayerHUD)
+	GlobalSignal.connect("points_changed", self, "on_points_changed")
+	GlobalSignal.emit_signal("player_ready", self)
+
 
 var velocity = Vector2()
 
 
 func dead():
-	GlobalSignal.emit_signal("on_death", self)
+	GlobalSignal.emit_signal("on_player_death", self)
 	queue_free()
+
+func get_weapons():
+	return WeaponManager.weapons
 
 func set_health(new_health):
 	previous_health = health
@@ -54,9 +67,29 @@ func get_health():
 func on_health_update():
 	if health != previous_health:
 		GlobalSignal.emit_signal("health_changed", self, health)
+	if health < previous_health:
+		PlayerRegenCooldown.start()
 	if health <= 0:
 		dead()
+
+func on_points_changed(player, previous_points, new_points):
+	if player == self:
+		if new_points > previous_points:
+			var diff = new_points - previous_points
+			total_points += diff
+	
+
+func set_points(new_points):
+	var previous_points = points
+	points = new_points
+	GlobalSignal.emit_signal("points_changed", self, previous_points, points)
+	
+func get_points():
+	return points
+
 func _physics_process(delta):
+	if health < max_health and can_regen and PlayerRegenCooldown.is_stopped():
+		set_health(health + 25 * delta)
 	velocity = Vector2()
 	if can_move:
 		if Input.is_action_pressed("move_right"):
@@ -76,11 +109,5 @@ func _physics_process(delta):
 			is_sprinting = false
 		if velocity != Vector2.ZERO:
 			velocity = move_and_slide(velocity.normalized() * move_speed * sprint_mult)
-		for i in get_slide_count():
-			var collision = get_slide_collision(i)
-			var collider = collision.collider
-			if collider.is_in_group("Zombie") and PlayerHitCooldown.is_stopped():
-				PlayerHitCooldown.start(hit_cooldown)
-				set_health(health - collider.damage)
 	if can_look:
 		look_at(get_global_mouse_position())

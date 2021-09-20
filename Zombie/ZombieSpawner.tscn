@@ -4,3 +4,6 @@
 
 [node name="ZombieSpawner" type="Position2D"]
 script = ExtResource( 1 )
+spawn_time = 5
+
+[node name="SpawnTimer" type="Timer" parent="."]
