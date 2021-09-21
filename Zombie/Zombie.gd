@@ -58,7 +58,6 @@ func _physics_process(delta):
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
 		move_and_slide(direction * speed)
 		look_at(TargetedPlayer.get_global_position())
-		
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			var collider = collision.collider
