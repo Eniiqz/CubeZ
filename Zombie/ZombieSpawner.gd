@@ -23,6 +23,5 @@ func spawn_zombie():
 			new_zombie.speed = 75
 		else:
 			new_zombie.speed = 125
-		new_zombie.set_navigation(World.ZombieNavigation)
 		new_zombie.global_position = global_position
 		World.add_child(new_zombie)
