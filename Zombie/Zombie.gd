@@ -1,7 +1,9 @@
 extends KinematicBody2D
 
 export onready var TargetedPlayer = null
+onready var PathfindTimer = get_node("PathfindTimer")
 
+var velocity = Vector2()
 export var can_move = false
 export var can_look_at_player = false
 
@@ -10,16 +12,15 @@ export (int) var speed
 
 export var max_health = 50
 export var health  = 50 setget set_health, get_health
-var navigation_path = PoolVector2Array() setget set_path
 var previous_health = health
-<<<<<<< Updated upstream
 var dead = false
-=======
+
+var navigation_path = PoolVector2Array()
 var navigation = null setget set_navigation
->>>>>>> Stashed changes
 
 func _ready():
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
+	PathfindTimer.connect("timeout", self, "get_target_path")
 
 func dead():
 	GlobalSignal.emit_signal("on_zombie_death", self)
@@ -28,11 +29,12 @@ func dead():
 func set_navigation(new_navigation):
 	navigation = new_navigation
 
-func set_path(new_path: PoolVector2Array):
-	navigation_path = new_path
-	if new_path.size() == 0:
-		return
-
+func get_target_path():
+	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
+		print("updating path")
+		navigation_path = navigation.get_simple_path(global_position, TargetedPlayer.get_global_position(), false)
+		print(navigation_path)
+		
 func set_health(new_health):
 	previous_health = health
 	health = max(0, new_health)
@@ -63,13 +65,26 @@ func search_for_player():
 		var value = player_distances[Player]
 		if value == min_value:
 			return Player
-	
+
+func move_to_target():
+	print(global_position.distance_to(navigation_path[0]))
+	if global_position.distance_to(navigation_path[0]) < 32:
+		navigation_path.remove(0)
+	else:
+		var direction = global_position.direction_to(navigation_path[0])
+		velocity = direction * speed
+		velocity = move_and_slide(velocity)
+
 func _physics_process(delta):
-	if TargetedPlayer is KinematicBody2D:
-		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
-		# var direction = global_position.distance_to(navigation_path[0])
-		move_and_slide(speed * direction)
-		look_at(TargetedPlayer.get_global_position())
+	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
+		#var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
+		if navigation_path.size() > 0:
+			move_to_target()
+		
+		
+		
+		
+		#look_at(TargetedPlayer.get_global_position())
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			var collider = collision.collider
