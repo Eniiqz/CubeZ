@@ -15,8 +15,12 @@ export var health  = 50 setget set_health, get_health
 var previous_health = health
 var dead = false
 
+var path = []
+var navigation
+
 func _ready():
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
+	PathfindTimer.connect("timeout", self, "get_path_to_target")
 
 func dead():
 	GlobalSignal.emit_signal("on_zombie_death", self)
@@ -29,6 +33,13 @@ func set_health(new_health):
 		
 func get_health():
 	return health
+
+func set_navigation(new_nav):
+	navigation = new_nav
+
+func get_path_to_target():
+	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
+		path = navigation.get_simple_path(global_position, TargetedPlayer.global_position, false)
 
 func on_player_death(player):
 	if player == TargetedPlayer:
@@ -55,8 +66,18 @@ func search_for_player():
 	
 func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
-		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
-		move_and_slide(direction * speed)
+		if path.size() > 0:
+			var distance_to_next_point = global_position.distance_to(path[0])
+			if distance_to_next_point < 16:
+				path.remove(0)
+			else:
+				var direction = global_position.direction_to(path[0])
+				move_and_slide(direction * speed)
+
+
+		
+		#var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
+		#move_and_slide(direction * speed)
 		look_at(TargetedPlayer.get_global_position())
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
