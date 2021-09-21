@@ -68,7 +68,7 @@ func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
 		if path.size() > 0:
 			var distance_to_next_point = global_position.distance_to(path[0])
-			if distance_to_next_point < 16:
+			if distance_to_next_point < 4:
 				path.remove(0)
 			else:
 				var direction = global_position.direction_to(path[0])
