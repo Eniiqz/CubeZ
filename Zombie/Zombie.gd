@@ -10,8 +10,13 @@ export (int) var speed
 
 export var max_health = 50
 export var health  = 50 setget set_health, get_health
+var navigation_path = PoolVector2Array() setget set_path
 var previous_health = health
+<<<<<<< Updated upstream
 var dead = false
+=======
+var navigation = null setget set_navigation
+>>>>>>> Stashed changes
 
 func _ready():
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
@@ -19,6 +24,14 @@ func _ready():
 func dead():
 	GlobalSignal.emit_signal("on_zombie_death", self)
 	queue_free()
+	
+func set_navigation(new_navigation):
+	navigation = new_navigation
+
+func set_path(new_path: PoolVector2Array):
+	navigation_path = new_path
+	if new_path.size() == 0:
+		return
 
 func set_health(new_health):
 	previous_health = health
@@ -54,6 +67,7 @@ func search_for_player():
 func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D:
 		var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
+		# var direction = global_position.distance_to(navigation_path[0])
 		move_and_slide(speed * direction)
 		look_at(TargetedPlayer.get_global_position())
 		for i in get_slide_count():

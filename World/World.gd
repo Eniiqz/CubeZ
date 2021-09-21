@@ -12,6 +12,7 @@ var Powerups = {
 onready var PlayerSpawnLocation = get_node("PlayerSpawnLocation")
 onready var RoundEnd = get_node("RoundEnd")
 onready var InstakillTimer = get_node("InstakillTimer")
+onready var ZombieNavigation = get_node("ZombieNavigation")
 
 export (int) var current_round
 export (int) var current_zombie_health
