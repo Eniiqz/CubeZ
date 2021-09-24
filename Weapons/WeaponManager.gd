@@ -31,24 +31,27 @@ func switch_weapon(new_weapon):
 		new_weapon.show()
 		GlobalSignal.emit_signal("weapon_changed", previous_weapon, new_weapon)
 
-func _create_bullet():
+func _create_bullet(direction):
 	var NewBullet = Bullet.instance()
 	active_bullets.append(NewBullet)
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
 	Player.get_parent().add_child(NewBullet)
 	NewBullet.set_global_position(bullet_start_pos)
-	NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
+	if direction:
+		NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized() * direction)
+	else:
+		NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
 
 func on_zombie_death(zombie):
 	last_zombie_killed = zombie
 
-
 func on_bullet_hit(bullet, object_hit):
-	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie"):
+	if object_hit is KinematicBody2D and object_hit.is_in_group("Zombie") and not object_hit.dead:
 		object_hit.health -= current_weapon.damage
-		Player.set_points(Player.get_points() + 10)
+		if not current_weapon.is_shotgun:
+			Player.set_points(Player.get_points() + 10)
 		if last_zombie_killed == object_hit:
 			Player.set_points(Player.get_points() + 70)
 	if bullet.is_connected("bullet_hit", self, "on_bullet_hit"):
@@ -57,7 +60,12 @@ func on_bullet_hit(bullet, object_hit):
 
 func on_weapon_fired(weapon):
 	if weapon == current_weapon:
-		_create_bullet()
+		if weapon.is_shotgun:
+			for shot in weapon.shots_in_burst:
+				var random_spread = Vector2(1, rand_range(0, rand_range(1, 3)))
+				_create_bullet(random_spread)
+		else:
+			_create_bullet(false)
 		if current_weapon.current_ammo_in_mag == 0 and current_weapon.auto_reload:
 			current_weapon.reload()
 
@@ -93,3 +101,5 @@ func _input(event: InputEvent):
 			switch_weapon(weapons[2])
 		elif event.is_action_pressed("weapon_slot_4"):
 			switch_weapon(weapons[3])
+		elif event.is_action_pressed("weapon_slot_5"):
+			switch_weapon(weapons[4])

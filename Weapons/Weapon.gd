@@ -69,6 +69,9 @@ func _finish_reload():
 	if fire_mode == 2:
 		is_bursting = false
 
+func _shotgun_reload():
+	pass
+
 func reload():
 	if current_ammo_in_mag < default_ammo_in_mag:
 		is_reloading = true

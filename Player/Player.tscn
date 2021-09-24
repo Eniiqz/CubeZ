@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Weapons/Weapon.tscn" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://TDS Assets/PNG/weapon_gun.png" type="Texture" id=4]
 [ext_resource path="res://Weapons/SMG/SMG.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Weapons/Burst AR/Burst AR.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Weapons/Shotgun/Shotgun.tscn" type="PackedScene" id=7]
+[ext_resource path="res://TDS Assets/PNG/weapon_machine.png" type="Texture" id=8]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 40, 40, 40 )
@@ -63,6 +65,23 @@ max_range = 2250
 reload_time = 6.5
 bullet_velocity = 1565
 
+[node name="Shotgun" parent="WeaponManager" instance=ExtResource( 7 )]
+default_ammo_in_mag = 5
+default_ammo_reserve = 80
+fire_rate = 60
+damage = 15
+max_range = 900
+reload_time = 2.5
+bullet_velocity = 1250
+is_shotgun = true
+shots_in_burst = 10
+
+[node name="Sprite" parent="WeaponManager/Shotgun" index="1"]
+texture = ExtResource( 8 )
+
+[node name="WeaponEnd" parent="WeaponManager/Shotgun" index="2"]
+position = Vector2( 16.5, 0 )
+
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 mesh = SubResource( 1 )
 
@@ -83,3 +102,4 @@ one_shot = true
 [editable path="WeaponManager/SMG"]
 [editable path="WeaponManager/Burst AR"]
 [editable path="WeaponManager/LMG"]
+[editable path="WeaponManager/Shotgun"]
