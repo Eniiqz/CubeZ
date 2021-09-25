@@ -25,7 +25,7 @@ func _on_Bullet_body_entered(body: Node) -> void:
 	if body is KinematicBody2D and body.is_in_group("Zombie"):
 		emit_signal("bullet_hit", self, body)
 	if body.is_in_group("Environment"):
-		pass
+		emit_signal("bullet_hit", self, body)
 		# Add hit effects or something later on
 	queue_free()
 	

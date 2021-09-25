@@ -43,7 +43,7 @@ func _ready():
 	current_ammo_reserve = default_ammo_reserve
 	shot_delay = (60 / float(fire_rate))
 	if fire_mode == 2:
-		burst_delay = shot_delay * shots_in_burst + 0.25
+		burst_delay = shot_delay * shots_in_burst
 	WeaponLine.set_point_position(0, WeaponEnd.position)
 	ReloadTimer.connect("timeout", self, "_finish_reload")
 	
