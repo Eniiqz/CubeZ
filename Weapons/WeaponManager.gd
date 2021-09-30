@@ -60,7 +60,7 @@ func on_weapon_fired(weapon):
 	if weapon == current_weapon:
 		if weapon.is_shotgun:
 			for shot in weapon.shots_in_burst:
-				var random_spread = Vector2(1, rand_range(0, rand_range(1, 3)))
+				var random_spread = Vector2((rand_range(1, 6)), (rand_range(1, 6)))
 				_create_bullet(random_spread)
 		else:
 			_create_bullet(false)

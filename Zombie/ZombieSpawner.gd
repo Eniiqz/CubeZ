@@ -1,7 +1,7 @@
 extends Node2D
 
 onready var SpawnTimer = get_node("SpawnTimer")
-onready var World = get_parent()
+onready var World = get_parent().get_parent()
 export (int) onready var spawn_time
 
 const Zombie = preload("res://Zombie/Zombie.tscn")
