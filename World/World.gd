@@ -79,7 +79,10 @@ func on_zombie_spawned(zombie):
 	pass
 
 func on_player_death(player):
-	print(player.name, " has died.")
+	print(get_tree().get_nodes_in_group("Player").empty())
+	print(get_tree().get_nodes_in_group("Player").size())
+	if get_tree().get_nodes_in_group("Player").empty():
+		get_tree().quit()
 
 func on_powerup_touched(powerup, player):
 	if powerup.name == "MaxAmmo":
