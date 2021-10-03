@@ -9,10 +9,11 @@ var Powerups = {
 }
 
 
-onready var PlayerSpawnLocation = get_node("PlayerSpawnLocation")
-onready var RoundEnd = get_node("RoundEnd")
-onready var InstakillTimer = get_node("InstakillTimer")
-onready var ZombieNavigation = get_node("ZombieNavigation")
+onready var current_level
+onready var PlayerSpawnLocation
+onready var RoundEnd
+onready var InstakillTimer
+onready var ZombieNavigation
 
 export (int) var current_round
 export (int) var current_zombie_health
@@ -26,8 +27,23 @@ export (int) var powerup_chance = (50) + 1 # denominator, so like 1/50, use 50, 
 export (bool) var instakill_active = false
 func DEBUG(player):
 	player.invincible = true
+	
+	
+func load_level(level: String):
+	var previous_level = current_level
+	var load_string = "res://World/" + level + "/" + level + ".tscn"
+	if previous_level != null:
+		previous_level.queue_free()
+	var new_level = load(load_string)
+	current_level = new_level.instance()
+	add_child(current_level)
+	PlayerSpawnLocation = current_level.get_node("PlayerSpawnLocation")
+	RoundEnd = current_level.get_node("RoundEnd")
+	InstakillTimer = current_level.get_node("InstakillTimer")
+	ZombieNavigation = current_level.get_node("ZombieNavigation")
 
 func _ready():
+	load_level("Level0") # Debug line
 	randomize()
 	GlobalSignal.connect("on_zombie_death", self, "on_zombie_death")
 	GlobalSignal.connect("on_player_death", self, "on_player_death")
@@ -65,6 +81,7 @@ func calculate_drop_chance(object_position):
 		var random_powerup = keys[get_random_index - 1]
 		var new_powerup = Powerups[random_powerup].instance()
 		add_child(new_powerup)
+		print(new_powerup.name + " spawned!")
 		new_powerup.set_global_position(object_position)
 
 func on_zombie_death(object):

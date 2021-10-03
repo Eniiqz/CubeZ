@@ -15,9 +15,11 @@ one_shot = true
 [node name="WeaponEnd" type="Position2D" parent="."]
 
 [node name="Line2D" type="Line2D" parent="."]
+z_index = 9
+z_as_relative = false
 points = PoolVector2Array( 0, 0, 0, 0 )
 width = 1.0
-default_color = Color( 0.996078, 0.0509804, 0.0509804, 1 )
+default_color = Color( 0.145098, 0.996078, 0.0509804, 1 )
 
 [node name="Reload" type="Timer" parent="."]
 one_shot = true

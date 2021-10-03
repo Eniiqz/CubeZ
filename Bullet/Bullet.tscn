@@ -11,6 +11,7 @@ extents = Vector2( 5, 1 )
 [node name="Bullet" type="Area2D" groups=[
 "Bullet",
 ]]
+z_index = 9
 collision_mask = 2
 script = ExtResource( 1 )
 
