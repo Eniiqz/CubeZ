@@ -2,7 +2,6 @@ extends Node2D
 
 onready var current_weapon
 onready var weapons = []
-onready var active_bullets = []
 onready var Player = get_parent()
 onready var last_zombie_killed
 
@@ -33,13 +32,12 @@ func switch_weapon(new_weapon):
 
 func _create_bullet(direction):
 	var NewBullet = Bullet.instance()
-	active_bullets.append(NewBullet)
 	NewBullet.connect("bullet_hit", self, "on_bullet_hit")
 	var bullet_start_pos = current_weapon.WeaponEnd.get_global_position()
 	Player.get_parent().add_child(NewBullet)
 	NewBullet.set_global_position(bullet_start_pos)
 	if direction:
-		NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized() * direction)
+		NewBullet.set_direction(((get_global_mouse_position() - bullet_start_pos) * direction).normalized())
 	else:
 		NewBullet.set_direction((get_global_mouse_position() - bullet_start_pos).normalized())
 	NewBullet.set_weapon_fired_from(current_weapon)
@@ -62,7 +60,7 @@ func on_weapon_fired(weapon):
 	if weapon == current_weapon:
 		if weapon.is_shotgun:
 			for shot in weapon.shots_in_burst:
-				var random_spread = Vector2(1, rand_range(0, rand_range(1, 3)))
+				var random_spread = Vector2((rand_range(1, 6)), (rand_range(1, 6)))
 				_create_bullet(random_spread)
 		else:
 			_create_bullet(false)

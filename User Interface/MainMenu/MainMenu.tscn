@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://User Interface/italic_font.tres" type="DynamicFontData" id=2]
+[ext_resource path="res://User Interface/MainMenu/MainMenu.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 128
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[node name="MainMenu" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="ColorRect" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+color = Color( 0.137255, 0.129412, 0.129412, 1 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 400.0
+margin_top = 187.0
+margin_right = 879.0
+margin_bottom = 533.0
+
+[node name="Title" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+margin_right = 479.0
+margin_bottom = 129.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Title"]
+margin_right = 479.0
+margin_bottom = 129.0
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Title/HBoxContainer"]
+margin_right = 380.0
+margin_bottom = 129.0
+custom_fonts/font = SubResource( 1 )
+text = "Cube"
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer/Title/HBoxContainer"]
+margin_left = 384.0
+margin_right = 479.0
+margin_bottom = 129.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 0.0117647, 0.0117647, 1 )
+text = "Z"
+
+[node name="CenterContainer2" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+margin_top = 133.0
+margin_right = 479.0
+margin_bottom = 346.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/CenterContainer2"]
+margin_left = 119.0
+margin_right = 360.0
+margin_bottom = 213.0
+custom_constants/separation = 30
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer"]
+margin_right = 241.0
+margin_bottom = 51.0
+focus_neighbour_top = NodePath("../Quit")
+custom_fonts/font = ExtResource( 1 )
+text = "Start"
+
+[node name="Options" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer"]
+margin_top = 81.0
+margin_right = 241.0
+margin_bottom = 132.0
+custom_fonts/font = ExtResource( 1 )
+text = "Options"
+
+[node name="Quit" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer"]
+margin_top = 162.0
+margin_right = 241.0
+margin_bottom = 213.0
+focus_neighbour_bottom = NodePath("../Start")
+custom_fonts/font = ExtResource( 1 )
+text = "Quit"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer/Options" to="." method="_on_Options_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
