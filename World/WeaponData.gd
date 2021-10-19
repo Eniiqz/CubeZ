@@ -17,16 +17,16 @@ var weapons = {
 #TODO: FIX THIS
 func get_cost(weapon):
 	if weapons.has(weapon):
-		return weapons.weapon.price
+		return weapons[weapon].price
 		
 func get_ammo_cost(weapon):
 	if weapons.has(weapon):
-		return weapons.weapon.ammo_price
+		return weapons[weapon].ammo_price
 
 func get_damage(weapon):
 	if weapons.has(weapon):
-		return weapons.weapon.damage
+		return weapons[weapon].damage
 
 func get_box_status(weapon):
 	if weapons.has(weapon):
-		return weapons.weapon.in_box
+		return weapons[weapon].in_box

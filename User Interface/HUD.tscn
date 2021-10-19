@@ -123,17 +123,16 @@ __meta__ = {
 [node name="Interaction" type="Label" parent="."]
 visible = false
 anchor_left = 0.5
-anchor_top = 0.969
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.969
-margin_left = -226.0
-margin_top = -22.6801
-margin_right = 226.0
-margin_bottom = 22.3199
+anchor_bottom = 1.0
+margin_left = -334.0
+margin_top = -45.0
+margin_right = 334.0
 custom_fonts/font = ExtResource( 1 )
 text = "Hold // for BLANK [$500)"
 align = 1
 valign = 1
 __meta__ = {
-"_edit_use_anchors_": true
+"_edit_use_anchors_": false
 }
