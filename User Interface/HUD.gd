@@ -5,6 +5,7 @@ onready var ReserveAmmo = get_node("Reserve")
 onready var Weapon = get_node("Weapon")
 onready var Health = get_node("Health")
 onready var RoundCounter = get_node("RoundCounter")
+onready var Interaction = get_node("Interaction")
 
 var Player
 var player_in_wallbuy_zone
@@ -49,9 +50,14 @@ func on_health_changed(object, new_health):
 
 func on_wallbuy_event(entering, player, wallbuy):
 	if player == Player:
-		player_in_wallbuy_zone = entering
-		# create prompt asking if they want to buy weapon
-
+		Interaction.visible = entering
+		if entering:
+			var formatted_string = "Hold F for %s // [Cost: $%s]"
+			var actual_string = formatted_string % [wallbuy.weapon, WeaponData.get_cost(wallbuy.weapon)] # TODO: add text per desired user input
+			Interaction.text = actual_string
+		else:
+			Interaction.text = ""
+			
 func _input(event):
 	if player_in_wallbuy_zone and event.is_action_pressed("action_use"):
 		# buy weapon

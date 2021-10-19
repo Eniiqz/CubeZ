@@ -119,3 +119,4 @@ one_shot = true
 
 [node name="Wallbuy" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1369.22, 305.285 )
+weapon = "SMG"

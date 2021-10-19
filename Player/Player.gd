@@ -43,6 +43,7 @@ func _ready():
 	PlayerHUD.set_player(self)
 	get_parent().add_child(PlayerHUD)
 	GlobalSignal.connect("points_changed", self, "on_points_changed")
+	#GlobalSignal.connect("wallbuy_activated", self, "wallbuy_activated")
 	GlobalSignal.emit_signal("player_ready", self)
 
 
