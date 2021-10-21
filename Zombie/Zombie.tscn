@@ -22,4 +22,5 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="PathfindTimer" type="Timer" parent="."]
+wait_time = 0.25
 autostart = true
