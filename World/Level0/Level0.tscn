@@ -70,7 +70,6 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [node name="Level0" type="Node"]
 
 [node name="ZombieNavigation" type="Navigation2D" parent="."]
-position = Vector2( 111, 64 )
 
 [node name="OuterWall" type="TileMap" parent="ZombieNavigation"]
 position = Vector2( 82, -64 )
@@ -120,3 +119,6 @@ one_shot = true
 [node name="Wallbuy" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1369.22, 305.285 )
 weapon = "SMG"
+
+[node name="PathfindTimer" type="Timer" parent="."]
+autostart = true
