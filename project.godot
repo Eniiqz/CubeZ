@@ -46,6 +46,7 @@ config/icon="res://icon.png"
 
 GlobalSignal="*res://World/GlobalSignal.gd"
 Pause="*res://World/Pause.tscn"
+WeaponData="*res://World/WeaponData.gd"
 
 [display]
 

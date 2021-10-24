@@ -4,5 +4,4 @@
 
 [node name="World" type="Node2D"]
 pause_mode = 1
-position = Vector2( 112, 64 )
 script = ExtResource( 3 )

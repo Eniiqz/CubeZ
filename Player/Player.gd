@@ -1,6 +1,8 @@
 extends KinematicBody2D
 class_name Player
 
+const scent_scene = preload("res://Player/Scent/Scent.tscn")
+
 export (int) var move_speed = 150
 export (float) var hit_cooldown = 0.5
 
@@ -27,10 +29,14 @@ var previous_health
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
 onready var PlayerRegenCooldown = get_node("RegenCooldown")
+onready var ScentCooldown = get_node("ScentCooldown")
 onready var WeaponManager = get_node("WeaponManager")
+
 onready var HUD = preload("res://User Interface/HUD.tscn")
 
 onready var PlayerHUD
+
+var scent_trail = []
 
 func _ready():
 	can_move = true
@@ -43,14 +49,24 @@ func _ready():
 	PlayerHUD.set_player(self)
 	get_parent().add_child(PlayerHUD)
 	GlobalSignal.connect("points_changed", self, "on_points_changed")
+	#GlobalSignal.connect("wallbuy_activated", self, "wallbuy_activated")
 	GlobalSignal.emit_signal("player_ready", self)
+	ScentCooldown.connect("timeout", self, "add_scent")
 
 
 var velocity = Vector2()
 
+func add_scent():
+	var scent = scent_scene.instance()
+	scent.player = self
+	scent.global_position = self.global_position
+	get_parent().add_child(scent)
+	scent_trail.push_front(scent)
 
 func dead():
 	GlobalSignal.emit_signal("on_player_death", self)
+	ScentCooldown.disconnect("timeout", self, "add_scent")
+	scent_trail.clear()
 	queue_free()
 
 func get_weapons():

@@ -14,6 +14,7 @@ onready var PlayerSpawnLocation
 onready var RoundEnd
 onready var InstakillTimer
 onready var ZombieNavigation
+onready var PathfindTimer
 
 export (int) var current_round
 export (int) var current_zombie_health
@@ -41,6 +42,7 @@ func load_level(level: String):
 	RoundEnd = current_level.get_node("RoundEnd")
 	InstakillTimer = current_level.get_node("InstakillTimer")
 	ZombieNavigation = current_level.get_node("ZombieNavigation")
+	PathfindTimer = current_level.get_node("PathfindTimer")
 
 func _ready():
 	load_level("Level0") # Debug line
@@ -50,6 +52,7 @@ func _ready():
 	GlobalSignal.connect("on_zombie_spawned", self, "on_zombie_spawned")
 	GlobalSignal.connect("on_powerup_touched", self, "on_powerup_touched")
 	InstakillTimer.connect("timeout", self, "_disable_instakill")
+	PathfindTimer.connect("timeout", self, "zombie_pathfind")
 	current_zombie_health = 50
 	spawn_player()
 	change_round()
@@ -115,6 +118,10 @@ func _disable_instakill():
 	instakill_active = false
 	for zombie in get_tree().get_nodes_in_group("Zombie"):
 		zombie.health = current_zombie_health
+
+func zombie_pathfind():
+	get_tree().call_group("Zombie", "chase_target")
+	print("pathfinding")
 
 func spawn_player():
 	var player = Player.instance()
