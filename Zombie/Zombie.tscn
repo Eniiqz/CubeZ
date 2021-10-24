@@ -13,6 +13,12 @@ z_index = 10
 collision_layer = 2
 collision_mask = 6
 script = ExtResource( 1 )
+can_move = null
+can_look_at_player = null
+damage = null
+speed = null
+max_health = null
+health = null
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 0.917647, 0.0980392, 0.0980392, 1 )
