@@ -41,8 +41,23 @@ func set_navigation(new_nav):
 	navigation = new_nav
 
 func handle_navigation():
-	generate_path()
-	navigate()
+	if TargetedPlayer != null:
+		PathfindRaycast.cast_to = TargetedPlayer.global_position
+		PathfindRaycast.force_raycast_update()
+		$Raycast.points = [Vector2.ZERO, Vector2.ZERO]
+		$Raycast.global_position = Vector2.ZERO
+		$Raycast.points[0] = global_position
+		$Raycast.points[1] = PathfindRaycast.cast_to
+		if PathfindRaycast.is_colliding():
+			var collider = PathfindRaycast.get_collider()
+			print(collider.name)
+			if collider != TargetedPlayer:
+				generate_path()
+				navigate()
+			else:
+
+				direction = global_position.direction_to(PathfindRaycast.cast_to)
+
 
 func on_player_death(player):
 	if player == TargetedPlayer:
@@ -68,7 +83,6 @@ func search_for_player():
 			return Player
 
 func move_from_zombie(zombie):
-	print(zombie.global_position)
 	PathfindRaycast.cast_to = (zombie.global_position)
 	var move_dir = -(global_position.direction_to(PathfindRaycast.cast_to))
 	direction = move_dir
@@ -87,12 +101,14 @@ func navigate():
 func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
 		#move_player()
-		print(direction)
 		var velocity = direction * speed
 		velocity = move_and_slide(velocity)
 		#var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
 		#move_and_slide(direction * speed)
-		look_at(TargetedPlayer.get_global_position())
+		PathfindRaycast.cast_to = TargetedPlayer.global_position
+		PathfindRaycast.force_raycast_update()
+		if !PathfindRaycast.is_colliding():
+			look_at(TargetedPlayer.get_global_position())
 		for i in get_slide_count():
 			var collision = get_slide_collision(i)
 			var collider = collision.collider

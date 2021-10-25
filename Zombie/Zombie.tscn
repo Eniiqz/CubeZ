@@ -27,6 +27,7 @@ cast_to = Vector2( 0, 0 )
 collision_mask = 7
 
 [node name="Line2D" type="Line2D" parent="."]
+points = PoolVector2Array( 0, 0, 0, 0 )
 
 [node name="Raycast" type="Line2D" parent="."]
 points = PoolVector2Array( 0, 0, 0, 0 )
