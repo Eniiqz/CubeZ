@@ -69,6 +69,7 @@ func search_for_player():
 			return Player
 
 func move_player():
+	get_path_to_target(TargetedPlayer)
 	if path.size() > 0:
 		if global_position.distance_to(path[0]) < 8:
 			path.remove(0)
@@ -76,38 +77,27 @@ func move_player():
 			direction = global_position.direction_to(path[0]).normalized()
 
 func chase_target():
-	var eligible_point = null
-	$Line2D.points = []
-	$Raycast.points[0] = global_position
 	TargetedPlayer = search_for_player()
-	print(TargetedPlayer.global_position)
 	PathfindRaycast.cast_to = global_position.direction_to(TargetedPlayer.global_position).normalized()
+	print(TargetedPlayer.global_position - global_position, PathfindRaycast.cast_to)
 	PathfindRaycast.force_raycast_update()
-	print(PathfindRaycast.cast_to)
-	$Raycast.points[1] = PathfindRaycast.cast_to
-	if !PathfindRaycast.is_colliding():
-		print("found player")
+	if not PathfindRaycast.is_colliding():
 		direction = PathfindRaycast.cast_to.normalized()
-		eligible_point = TargetedPlayer
 		
 	else:
-		print("checking scents")
 		for scent in TargetedPlayer.scent_trail:
 			PathfindRaycast.cast_to = global_position.direction_to(scent.global_position).normalized()
 			PathfindRaycast.force_raycast_update()
-			$Raycast.points[1] = PathfindRaycast.cast_to
 			if !PathfindRaycast.is_colliding():
 				direction = PathfindRaycast.cast_to.normalized()
-				eligible_point = scent
 				break
-	print(direction)
-	print(eligible_point)
-	if eligible_point != null:
 		look_at(TargetedPlayer.get_global_position())
 
 func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
-		#move_player()
+		move_player()
+		print(PathfindRaycast.is_colliding())
+		print(direction)
 		var velocity = direction * speed
 		velocity = move_and_slide(velocity)
 		#var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()

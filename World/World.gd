@@ -120,8 +120,9 @@ func _disable_instakill():
 		zombie.health = current_zombie_health
 
 func zombie_pathfind():
-	get_tree().call_group("Zombie", "chase_target")
-	print("pathfinding")
+	#get_tree().call_group("Zombie", "chase_target")
+	#print("pathfinding")
+	pass
 
 func spawn_player():
 	var player = Player.instance()
