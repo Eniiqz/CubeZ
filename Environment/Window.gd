@@ -29,9 +29,7 @@ func _on_BoardTimer_timeout():
 		current_boards = max(0, current_boards - 1)
 		if current_boards == 0:
 			$Board.visible = false
-			print($Board.get_collision_mask_bit(1))
 			$Board.set_collision_mask_bit(1, false)
-			print($Board.get_collision_mask_bit(1))
 			active_zombies.clear()
 			return
 		BoardTimer.start()

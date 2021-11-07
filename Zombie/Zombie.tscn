@@ -29,13 +29,6 @@ collision_mask = 7
 [node name="Line2D" type="Line2D" parent="."]
 points = PoolVector2Array( 0, 0, 0, 0 )
 
-<<<<<<< Updated upstream
-[node name="Raycast" type="Line2D" parent="."]
-points = PoolVector2Array( 0, 0, 0, 0 )
-default_color = Color( 0.588235, 0.941176, 0.0705882, 1 )
-
-=======
->>>>>>> Stashed changes
 [node name="PathfindTimer" type="Timer" parent="."]
 wait_time = 0.25
 autostart = true

@@ -6,10 +6,7 @@ onready var Weapon = get_node("Weapon")
 onready var Health = get_node("Health")
 onready var RoundCounter = get_node("RoundCounter")
 onready var Interaction = get_node("Interaction")
-<<<<<<< Updated upstream
-=======
 onready var Powerup = get_node("Powerup")
->>>>>>> Stashed changes
 
 var Player
 var player_in_wallbuy_zone
@@ -62,15 +59,12 @@ func on_wallbuy_event(entering, player, wallbuy):
 		else:
 			Interaction.text = ""
 			
-<<<<<<< Updated upstream
-=======
 
 func on_powerup_touched(powerup):
 	if powerup.type == "Instakill":
 		Powerup.visible = true
 		Powerup.text = "Instakill: 30"
 	
->>>>>>> Stashed changes
 func _input(event):
 	if player_in_wallbuy_zone and event.is_action_pressed("action_use"):
 		# buy weapon
