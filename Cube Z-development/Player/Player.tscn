@@ -1,0 +1,108 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Weapons/Weapon.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Weapons/WeaponManager.gd" type="Script" id=3]
+[ext_resource path="res://TDS Assets/PNG/weapon_gun.png" type="Texture" id=4]
+[ext_resource path="res://Weapons/SMG/SMG.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Weapons/Burst AR/Burst AR.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Weapons/Shotgun/Shotgun.tscn" type="PackedScene" id=7]
+[ext_resource path="res://TDS Assets/PNG/weapon_machine.png" type="Texture" id=8]
+[ext_resource path="res://TDS Assets/square.png" type="Texture" id=9]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 16 )
+
+[node name="Player" type="KinematicBody2D" groups=[
+"Player",
+]]
+z_index = 10
+collision_mask = 7
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 9 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="WeaponManager" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="Pistol" parent="WeaponManager" instance=ExtResource( 2 )]
+default_ammo_in_mag = 8
+default_ammo_reserve = 80
+fire_rate = 500
+damage = 23
+max_range = 1450
+reload_time = 2.4
+bullet_velocity = 1200
+
+[node name="Sprite" parent="WeaponManager/Pistol" index="1"]
+texture = ExtResource( 4 )
+
+[node name="WeaponEnd" parent="WeaponManager/Pistol" index="2"]
+position = Vector2( 9.5, 0 )
+
+[node name="SMG" parent="WeaponManager" instance=ExtResource( 5 )]
+fire_rate = 800
+max_range = 1250
+bullet_velocity = 1540
+
+[node name="Burst AR" parent="WeaponManager" instance=ExtResource( 6 )]
+default_ammo_in_mag = 30
+default_ammo_reserve = 120
+fire_rate = 700
+fire_mode = 2
+damage = 19
+max_range = 2500
+reload_time = 4.3
+bullet_velocity = 1500
+shots_in_burst = 3
+
+[node name="LMG" parent="WeaponManager" instance=ExtResource( 6 )]
+default_ammo_in_mag = 100
+default_ammo_reserve = 300
+fire_rate = 555
+fire_mode = 1
+damage = 23
+max_range = 2250
+reload_time = 6.5
+bullet_velocity = 1565
+
+[node name="Shotgun" parent="WeaponManager" instance=ExtResource( 7 )]
+default_ammo_in_mag = 5
+default_ammo_reserve = 80
+fire_rate = 60
+damage = 15
+max_range = 900
+reload_time = 2.5
+bullet_velocity = 2000
+is_shotgun = true
+shots_in_burst = 10
+
+[node name="Sprite" parent="WeaponManager/Shotgun" index="1"]
+texture = ExtResource( 8 )
+
+[node name="WeaponEnd" parent="WeaponManager/Shotgun" index="2"]
+position = Vector2( 16.5, 0 )
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+z_index = 3
+
+[node name="HitCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="RegenCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="ScentCooldown" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[editable path="WeaponManager/Pistol"]
+[editable path="WeaponManager/SMG"]
+[editable path="WeaponManager/Burst AR"]
+[editable path="WeaponManager/LMG"]
+[editable path="WeaponManager/Shotgun"]

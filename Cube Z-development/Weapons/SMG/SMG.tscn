@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Weapons/Weapon.tscn" type="PackedScene" id=1]
+[ext_resource path="res://TDS Assets/PNG/weapon_machine.png" type="Texture" id=2]
+
+[node name="SMG" instance=ExtResource( 1 )]
+default_ammo_in_mag = 30
+default_ammo_reserve = 120
+fire_rate = 1200
+fire_mode = 1
+damage = 13
+reload_time = 3.2
+
+[node name="Sprite" parent="." index="1"]
+texture = ExtResource( 2 )
+
+[node name="WeaponEnd" parent="." index="2"]
+position = Vector2( 16.5, 0 )

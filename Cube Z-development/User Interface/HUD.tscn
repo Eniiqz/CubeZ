@@ -136,8 +136,6 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
-<<<<<<< Updated upstream
-=======
 
 [node name="Powerup" type="Label" parent="."]
 visible = false
@@ -156,4 +154,3 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
->>>>>>> Stashed changes

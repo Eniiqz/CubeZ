@@ -73,6 +73,7 @@ func _process(delta):
 	if current_weapon != null:
 		var line_offset = Player.get_node("CollisionShape2D").shape.get_extents()
 		current_weapon.WeaponLine.set_point_position(1, to_local(get_global_mouse_position()) - line_offset)
+		print(current_weapon.WeaponLine.get_point_position(1), " ", get_global_mouse_position())
 		if Input.is_action_pressed("weapon_shoot") and current_weapon.fire_mode == 1:
 			current_weapon.shoot()
 

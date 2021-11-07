@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://User Interface/custom_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://User Interface/MainMenu/LevelSelect/LevelSelect.gd" type="Script" id=2]
+[ext_resource path="res://User Interface/MainMenu/LevelSelect/button_group.tres" type="ButtonGroup" id=3]
+
+[node name="LevelSelect" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -432, -32 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+group = ExtResource( 3 )
+
+[node name="Background" type="ColorRect" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+color = Color( 0.137255, 0.129412, 0.129412, 1 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+
+[node name="0" type="Button" parent="CenterContainer"]
+margin_left = 620.0
+margin_top = 334.0
+margin_right = 660.0
+margin_bottom = 385.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color_hover = Color( 0.941176, 0.0862745, 0.0862745, 1 )
+custom_colors/font_color_pressed = Color( 0.254902, 0.866667, 0.0980392, 1 )
+group = ExtResource( 3 )
+text = "0"
+flat = true

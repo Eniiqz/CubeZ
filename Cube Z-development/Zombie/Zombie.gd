@@ -44,26 +44,14 @@ func handle_navigation():
 	if TargetedPlayer != null:
 		PathfindRaycast.cast_to = TargetedPlayer.global_position
 		PathfindRaycast.force_raycast_update()
-<<<<<<< Updated upstream
-		$Raycast.points = [Vector2.ZERO, Vector2.ZERO]
-		$Raycast.global_position = Vector2.ZERO
-		$Raycast.points[0] = global_position
-		$Raycast.points[1] = PathfindRaycast.cast_to
 		if PathfindRaycast.is_colliding():
 			var collider = PathfindRaycast.get_collider()
 			print(collider.name)
-=======
-		if PathfindRaycast.is_colliding():
-			var collider = PathfindRaycast.get_collider()
->>>>>>> Stashed changes
 			if collider != TargetedPlayer:
 				generate_path()
 				navigate()
 			else:
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 				direction = global_position.direction_to(PathfindRaycast.cast_to)
 
 
@@ -108,16 +96,8 @@ func navigate():
 
 func _physics_process(delta):
 	if TargetedPlayer is KinematicBody2D and TargetedPlayer.is_in_group("Player"):
-<<<<<<< Updated upstream
-		#move_player()
 		var velocity = direction * speed
 		velocity = move_and_slide(velocity)
-		#var direction = (TargetedPlayer.get_global_position() - self.get_global_position()).normalized()
-		#move_and_slide(direction * speed)
-=======
-		var velocity = direction * speed
-		velocity = move_and_slide(velocity)
->>>>>>> Stashed changes
 		PathfindRaycast.cast_to = TargetedPlayer.global_position
 		PathfindRaycast.force_raycast_update()
 		if !PathfindRaycast.is_colliding():
