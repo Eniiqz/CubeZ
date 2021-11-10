@@ -46,7 +46,6 @@ func handle_navigation():
 		PathfindRaycast.force_raycast_update()
 		if PathfindRaycast.is_colliding():
 			var collider = PathfindRaycast.get_collider()
-			print(collider.name)
 			if collider != TargetedPlayer:
 				generate_path()
 				navigate()

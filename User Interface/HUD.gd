@@ -19,6 +19,7 @@ func _ready():
 	GlobalSignal.connect("health_changed", self, "on_health_changed")
 	GlobalSignal.connect("round_ended", self, "on_round_end")
 	GlobalSignal.connect("wallbuy_activated", self, "on_wallbuy_event")
+	GlobalSignal.connect("barrier_activated", self, "on_barrier_event")
 
 func set_player(new_player):
 	yield(self, "ready")
@@ -59,6 +60,14 @@ func on_wallbuy_event(entering, player, wallbuy):
 		else:
 			Interaction.text = ""
 			
+
+func on_barrier_event(entering, player, barrier):
+	if player == Player:
+		Interaction.visible = entering
+		if entering:
+			var formatted_string = "Hold F to repair."
+
+
 
 func on_powerup_touched(powerup):
 	if powerup.type == "Instakill":

@@ -16,12 +16,16 @@ func _on_Window_body_entered(body):
 		if not active_zombies.has(body):
 			active_zombies.append(body)
 			BoardTimer.start()
+	elif body.is_in_group("Player"):
+		GlobalSignal.emit_signal("barrier_activated", true, body, self)
 
 
 
 func _on_Window_body_exited(body):
 	if body.is_in_group("Zombie") and active_zombies.has(body):
 		active_zombies.erase(body)
+	elif body.is_in_group("Player"):
+		GlobalSignal.emit_signal("barrier_activated", false, body, self)
 
 
 func _on_BoardTimer_timeout():
@@ -32,4 +36,5 @@ func _on_BoardTimer_timeout():
 			$Board.set_collision_mask_bit(1, false)
 			active_zombies.clear()
 			return
+		print(current_boards)
 		BoardTimer.start()
