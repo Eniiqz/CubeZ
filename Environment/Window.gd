@@ -17,7 +17,8 @@ func _on_Window_body_entered(body):
 			active_zombies.append(body)
 			BoardTimer.start()
 	elif body.is_in_group("Player"):
-		GlobalSignal.emit_signal("barrier_activated", true, body, self)
+		if current_boards < max_boards:
+			GlobalSignal.emit_signal("barrier_activated", true, body, self)
 
 
 

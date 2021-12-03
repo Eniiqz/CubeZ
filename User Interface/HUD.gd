@@ -10,6 +10,7 @@ onready var Powerup = get_node("Powerup")
 
 var Player
 var player_in_wallbuy_zone
+var player_in_barrier
 var CurrentWeapon
 
 func _ready():
@@ -64,8 +65,12 @@ func on_wallbuy_event(entering, player, wallbuy):
 func on_barrier_event(entering, player, barrier):
 	if player == Player:
 		Interaction.visible = entering
+		player_in_barrier = entering
 		if entering:
 			var formatted_string = "Hold F to repair."
+			Interaction.text = formatted_string
+		else:
+			Interaction.text = ""
 
 
 
@@ -77,6 +82,8 @@ func on_powerup_touched(powerup):
 func _input(event):
 	if player_in_wallbuy_zone and event.is_action_pressed("action_use"):
 		# buy weapon
+		pass
+	if player_in_barrier and event.is_action_pressed("action_use"):
 		pass
 
 func update_hud(node_name: String, new_value):
