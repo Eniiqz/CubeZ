@@ -20,7 +20,8 @@ func _ready():
 	GlobalSignal.connect("health_changed", self, "on_health_changed")
 	GlobalSignal.connect("round_ended", self, "on_round_end")
 	GlobalSignal.connect("wallbuy_activated", self, "on_wallbuy_event")
-	GlobalSignal.connect("barrier_activated", self, "on_barrier_event")
+	GlobalSignal.connect("barrier_activated", self, "on_barrier_activated_event")
+	GlobalSignal.connect("barrier_updated", self, "on_barrier_updated_event")
 
 func set_player(new_player):
 	yield(self, "ready")
@@ -62,17 +63,31 @@ func on_wallbuy_event(entering, player, wallbuy):
 			Interaction.text = ""
 			
 
-func on_barrier_event(entering, player, barrier):
+func on_barrier_activated_event(entering, player, barrier):
+	var current_boards = barrier.current_boards
+	var max_boards = barrier.max_boards
+	
+	
+	print(barrier, barrier.current_boards, barrier.max_boards)
+	#current_boards = barrier.current_boards
+	#max_boards = barrier.max_boards
+	
 	if player == Player:
 		Interaction.visible = entering
 		player_in_barrier = entering
 		if entering:
-			var formatted_string = "Hold F to repair."
+			var formatted_string = "Hold F to repair ({current} / {max}).".format({"current": current_boards, "max": max_boards})
 			Interaction.text = formatted_string
 		else:
 			Interaction.text = ""
 
-
+func on_barrier_updated_event(barrier):
+	var current_boards = barrier.current_boards
+	var max_boards = barrier.max_boards
+	
+	if Interaction.visible:
+		var formatted_string = "Hold F to repair ({current} / {max}).".format({"current": current_boards, "max": max_boards})
+		Interaction.text = formatted_string
 
 func on_powerup_touched(powerup):
 	if powerup.type == "Instakill":

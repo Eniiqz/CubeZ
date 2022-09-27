@@ -1,7 +1,7 @@
 extends Area2D
 
-export var max_boards: int = 6
-export var current_boards: int = max_boards
+export (int) var max_boards = 6
+export (int) var current_boards = max_boards
 
 onready var BoardTimer = get_node("BoardTimer")
 onready var active_zombies = []
@@ -32,6 +32,7 @@ func _on_Window_body_exited(body):
 func _on_BoardTimer_timeout():
 	if not active_zombies.empty() and current_boards > 0:
 		current_boards = max(0, current_boards - 1)
+		GlobalSignal.emit_signal("barrier_updated", self)
 		if current_boards == 0:
 			$Board.visible = false
 			$Board.set_collision_mask_bit(1, false)
