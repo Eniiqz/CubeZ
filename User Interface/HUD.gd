@@ -12,6 +12,7 @@ var Player
 var player_in_wallbuy_zone
 var player_in_barrier
 var CurrentWeapon
+var active_barrier
 
 func _ready():
 	GlobalSignal.connect("weapon_ammo_changed", self, "on_weapon_ammo_changed")
@@ -64,6 +65,7 @@ func on_wallbuy_event(entering, player, wallbuy):
 			
 
 func on_barrier_activated_event(entering, player, barrier):
+	print(entering)
 	var current_boards = barrier.current_boards
 	var max_boards = barrier.max_boards
 	
@@ -75,10 +77,13 @@ func on_barrier_activated_event(entering, player, barrier):
 	if player == Player:
 		Interaction.visible = entering
 		player_in_barrier = entering
+		print(player_in_barrier)
 		if entering:
+			active_barrier = barrier
 			var formatted_string = "Hold F to repair ({current} / {max}).".format({"current": current_boards, "max": max_boards})
 			Interaction.text = formatted_string
 		else:
+			active_barrier = barrier
 			Interaction.text = ""
 
 func on_barrier_updated_event(barrier):
@@ -100,6 +105,7 @@ func _input(event):
 		pass
 	if player_in_barrier and event.is_action_pressed("action_use"):
 		pass
+
 
 func update_hud(node_name: String, new_value):
 	var node = get_node_or_null(node_name)

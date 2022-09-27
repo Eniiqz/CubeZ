@@ -24,6 +24,9 @@ export var max_health = 100
 export (bool) var invincible
 var previous_health
 
+export var interaction_button_held = false
+
+
 onready var PlayerCamera = get_node("PlayerCamera")
 onready var PlayerHitCooldown = get_node("HitCooldown")
 onready var PlayerRegenCooldown = get_node("RegenCooldown")
@@ -93,6 +96,7 @@ func _physics_process(delta):
 	if health < max_health and can_regen and PlayerRegenCooldown.is_stopped():
 		set_health(health + 25 * delta)
 	velocity = Vector2()
+	interaction_button_held = false
 	if can_move:
 		if Input.is_action_pressed("move_right"):
 			velocity.x += 1
@@ -109,6 +113,8 @@ func _physics_process(delta):
 		else:
 			sprint_mult = 1
 			is_sprinting = false
+		if Input.is_action_pressed("action_use"):
+			interaction_button_held = true
 		if velocity != Vector2.ZERO:
 			velocity = move_and_slide(velocity.normalized() * move_speed * sprint_mult)
 	if can_look:

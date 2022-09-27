@@ -20,6 +20,9 @@ script = ExtResource( 1 )
 wait_time = 2.0
 one_shot = true
 
+[node name="BoardRepairTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 3 )
 
@@ -37,3 +40,5 @@ shape = SubResource( 4 )
 [connection signal="body_entered" from="." to="." method="_on_Window_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_Window_body_exited"]
 [connection signal="timeout" from="BoardTimer" to="." method="_on_BoardTimer_timeout"]
+[connection signal="timeout" from="BoardRepairTimer" to="." method="_on_BoardRepairTimer_timeout"]
+[connection signal="timeout" from="BoardRepairTimer" to="." method="_on_BoardTimer_timeout"]
