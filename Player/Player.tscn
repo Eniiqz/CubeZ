@@ -13,9 +13,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 16 )
 
-[node name="Player" type="KinematicBody2D" groups=[
-"Player",
-]]
+[node name="Player" type="KinematicBody2D" groups=["Player"]]
 z_index = 10
 collision_mask = 7
 script = ExtResource( 1 )
@@ -75,7 +73,7 @@ default_ammo_in_mag = 5
 default_ammo_reserve = 80
 fire_rate = 60
 damage = 15
-max_range = 900
+max_range = 500
 reload_time = 2.5
 bullet_velocity = 2000
 is_shotgun = true

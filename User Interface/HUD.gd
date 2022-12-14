@@ -68,31 +68,36 @@ func on_barrier_activated_event(entering, player, barrier):
 	print(entering)
 	var current_boards = barrier.current_boards
 	var max_boards = barrier.max_boards
-	
+
 	
 	print(barrier, barrier.current_boards, barrier.max_boards)
 	#current_boards = barrier.current_boards
 	#max_boards = barrier.max_boards
 	
 	if player == Player:
-		Interaction.visible = entering
+		Interaction.visible = entering if current_boards < max_boards else false
 		player_in_barrier = entering
-		print(player_in_barrier)
 		if entering:
+			print("Player entered barrier")
 			active_barrier = barrier
 			var formatted_string = "Hold F to repair ({current} / {max}).".format({"current": current_boards, "max": max_boards})
 			Interaction.text = formatted_string
 		else:
-			active_barrier = barrier
+			active_barrier = null
 			Interaction.text = ""
 
 func on_barrier_updated_event(barrier):
 	var current_boards = barrier.current_boards
 	var max_boards = barrier.max_boards
 	
+	print(active_barrier)
+	if active_barrier == barrier:
+		Interaction.visible = true
+	
 	if Interaction.visible:
 		var formatted_string = "Hold F to repair ({current} / {max}).".format({"current": current_boards, "max": max_boards})
 		Interaction.text = formatted_string
+		
 
 func on_powerup_touched(powerup):
 	if powerup.type == "Instakill":

@@ -26,6 +26,7 @@ export (int) var zombies_spawned_in_round
 
 export (int) var powerup_chance = (50) + 1 # denominator, so like 1/50, use 50, do not change "+ 1"
 export (bool) var instakill_active = false
+
 func DEBUG(player):
 	player.invincible = true
 	
@@ -33,8 +34,10 @@ func DEBUG(player):
 func load_level(level: String):
 	var previous_level = current_level
 	var load_string = "res://World/" + level + "/" + level + ".tscn"
+	
 	if previous_level != null:
 		previous_level.queue_free()
+	
 	var new_level = load(load_string)
 	current_level = new_level.instance()
 	add_child(current_level)
@@ -115,6 +118,9 @@ func on_powerup_touched(powerup, player):
 
 func _disable_instakill():
 	print("instakill over")
+	
+	# TODO: STORE CURRENT ZOMBIE HEALTHS AND RESTORE THEM AFTER INSTAKILL IS OVER IF THE
+	# ZOMBIE IS STILL ALIVE
 	instakill_active = false
 	for zombie in get_tree().get_nodes_in_group("Zombie"):
 		zombie.health = current_zombie_health

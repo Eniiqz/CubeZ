@@ -3,16 +3,24 @@
 [ext_resource path="res://Zombie/Zombie.gd" type="Script" id=1]
 [ext_resource path="res://TDS Assets/square.png" type="Texture" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 16 )
+[sub_resource type="CircleShape2D" id=1]
+radius = 16.0
 
-[node name="Zombie" type="KinematicBody2D" groups=[
-"Zombie",
-]]
+[node name="Zombie" type="KinematicBody2D" groups=["Zombie"]]
 z_index = 10
 collision_layer = 2
 collision_mask = 6
 script = ExtResource( 1 )
+speed = 50
+
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
+path_max_distance = 20.0
+avoidance_enabled = true
+radius = 48.0
+neighbor_dist = 96.0
+max_neighbors = 24
+time_horizon = 10.0
+max_speed = 75.0
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 0.917647, 0.0980392, 0.0980392, 1 )
@@ -31,4 +39,5 @@ points = PoolVector2Array( 0, 0, 0, 0 )
 
 [node name="PathfindTimer" type="Timer" parent="."]
 wait_time = 0.25
-autostart = true
+
+[connection signal="timeout" from="PathfindTimer" to="." method="_on_PathfindTimer_timeout"]

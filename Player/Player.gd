@@ -56,6 +56,7 @@ var velocity = Vector2()
 
 func dead():
 	GlobalSignal.emit_signal("on_player_death", self)
+	
 	queue_free()
 
 func get_weapons():

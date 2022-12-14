@@ -24,8 +24,14 @@ func _physics_process(delta: float) -> void:
 func _on_Bullet_body_entered(body: Node) -> void:
 	if body is KinematicBody2D and body.is_in_group("Zombie"):
 		emit_signal("bullet_hit", self, body)
+		queue_free()
 	if body.is_in_group("Environment"):
 		emit_signal("bullet_hit", self, body)
+	
+		queue_free()
 		# Add hit effects or something later on
-	queue_free()
+	elif body.is_in_group("Window"):
+		emit_signal("bullet_hit", self, body)
+		
+	
 	
